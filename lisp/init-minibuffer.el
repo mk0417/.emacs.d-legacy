@@ -98,6 +98,10 @@
   (require 'embark-consult)
   (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode))
 
+;; keystrokes feedback
+(setq echo-keystrokes 0.02)
+
+
 ;; keybindings
 (with-eval-after-load 'evil
   (general-create-definer p-space-leader-def

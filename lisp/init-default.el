@@ -25,12 +25,20 @@
 ;; disable bell sound
 (setq ring-bell-function 'ignore)
 
-;; disable automatic cursor re-centering
-;; https://www.reddit.com/r/emacs/comments/2dgy52/how_to_stop_emacs_automatically_recentering_the/
-(setq scroll-step 1)
+;; scroll
+(setq
+ ;; disable automatic cursor re-centering
+ ;; https://www.reddit.com/r/emacs/comments/2dgy52/how_to_stop_emacs_automatically_recentering_the/
+ scroll-step 1
+ ;; https://github.com/hlissner/doom-emacs/blob/develop/core/core-ui.el
+ hscroll-margin 2
+ hscroll-step 1
+ scroll-conservatively 101
+ scroll-preserve-screen-position t
+ auto-window-vscroll nil)
 
 ;; preferences
-(setq-default window-resize-pixelwise t
+(setq-default window-resize-pixelwise nil
               frame-resize-pixelwise t
               buffers-menu-max-size 30
               bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory)
@@ -45,10 +53,10 @@
               auto-save-default nil
               make-backup-files nil
               save-interprogram-paste-before-kill t
-              scroll-preserve-screen-position 'always
               set-mark-command-repeat-pop t
               truncate-lines nil
-	          truncate-partial-width-windows nil)
+	          truncate-partial-width-windows nil
+              whitespace-line-column nil)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 

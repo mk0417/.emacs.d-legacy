@@ -1,0 +1,35 @@
+;;; init-ui.el --- UI config  -*- lexical-binding: t; -*-
+
+;; minimal UI
+(setq use-file-dialog nil
+      use-dialog-box nil
+      inhibit-startup-screen t)
+
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (fboundp 'set-scroll-bar-mode)
+  (set-scroll-bar-mode nil))
+(menu-bar-mode -1)
+
+;; font
+(set-face-font 'default "Hack")
+
+;; left fringe only
+(fringe-mode '(8 . 0))
+
+;; highlight current line
+(global-hl-line-mode 1)
+
+;; line number
+(when (fboundp 'display-line-numbers-mode)
+  (setq-default display-line-numbers-width 3)
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
+
+;; column indicator
+(when (boundp 'display-fill-column-indicator)
+  (setq-default display-fill-column-indicator-column 80
+                display-fill-column-indicator-character ?\u254e))
+
+
+(provide 'init-ui)
+;;; init-ui.el ends here

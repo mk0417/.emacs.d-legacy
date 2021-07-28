@@ -20,6 +20,13 @@
 ;; highlight current line
 (global-hl-line-mode 1)
 
+;; favor vertical split
+(setq split-height-threshold nil)
+
+;; disable face of completions-first-difference
+(custom-set-faces
+   '(completions-first-difference ((t (:background nil :weight normal)))))
+
 ;; line number
 (when (fboundp 'display-line-numbers-mode)
   (setq-default display-line-numbers-width 3)

@@ -63,6 +63,7 @@
     (let ((region (buffer-substring beg end)))
       (evil-ex (concat "%s/" (replace-regexp-in-string "\/" "\\\\/" (regexp-quote region)) "/"))))
 
+  (define-key evil-normal-state-map (kbd "C-.") nil)
   (define-key evil-normal-state-map (kbd "S-c") nil)
   (define-key evil-normal-state-map (kbd "C-e") 'evil-end-of-line)
   (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)

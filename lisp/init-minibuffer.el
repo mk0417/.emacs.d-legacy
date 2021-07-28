@@ -11,6 +11,17 @@
 ;; vertico
 (add-hook 'after-init-hook 'vertico-mode)
 
+;; add » to indicate current candidate
+;; https://github.com/minad/vertico/wiki
+(advice-add #'vertico--format-candidate :around
+            (lambda (orig cand prefix suffix index _start)
+              (setq cand (funcall orig cand prefix suffix index _start))
+              (concat
+               (if (= vertico--index index)
+                   (propertize "» " 'face 'vertico-current)
+                 "  ")
+               cand)))
+
 ;; marginalia
 (add-hook 'after-init-hook 'marginalia-mode)
 
@@ -32,21 +43,24 @@
   (defmacro p-no-consult-preview (&rest cmds)
     `(with-eval-after-load 'consult
        (consult-customize ,@cmds :preview-key (kbd "M-v"))))
-  (p-no-consult-preview
-   consult-ripgrep
-   consult-git-grep
-   consult-grep
-   consult-bookmark
-   consult-recent-file consult-xref
-   consult--source-file
-   consult--source-project-file
-   consult--source-bookmark)
+  (p-no-consult-preview consult-ripgrep
+                        consult-git-grep
+                        consult-grep
+                        consult-bookmark
+                        consult-recent-file consult-xref
+                        consult--source-file
+                        consult--source-project-file
+                        consult--source-bookmark
+                        p-consult-rg-at-point-project
+                        p-consult-rg-current-dir
+                        p-consult-rg-other-dir
+                        p-consult-rg-at-point-current-dir)
 
   (global-set-key [remap switch-to-buffer] 'consult-buffer)
   (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window)
   (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
   (global-set-key [remap goto-line] 'consult-goto-line)
-  (global-set-key (kbd "C-x l")   'consult-line))
+  (global-set-key (kbd "C-x l") 'consult-line))
 
 (autoload 'consult--grep "consult")
 
@@ -83,22 +97,64 @@
     (consult-find "~/" initial)))
 
 ;; embark
-(setq embark-prompter 'embark-completing-read-prompter
-      embark-keymap-prompter-key ",")
-
 (autoload 'embark-act "embark")
 (autoload 'embark-export "embark")
 
-(global-set-key (kbd "C-c C-m") 'embark-act)
-(with-eval-after-load 'vertico
-  (define-key vertico-map (kbd "C-c C-o") 'embark-export)
-  (define-key vertico-map (kbd "C-o") 'embark-act))
+(global-set-key (kbd "C-,") 'embark-act)
+(global-set-key (kbd "C-c C-o") 'embark-export)
+
+;; embark which-key integration
+;; https://github.com/oantolin/embark/wiki/Additional-Configuration
+(defun embark-which-key-indicator (keymap targets)
+  (which-key--show-keymap
+   (if (eq (caar targets) 'embark-become)
+       "Become"
+     (format "Act on %s '%s'%s"
+             (caar targets)
+             (embark--truncate-target (cdar targets))
+             (if (cdr targets) "…" "")))
+   keymap
+   nil nil t)
+  (lambda (prefix)
+    (if prefix
+        (embark-which-key-indicator (lookup-key keymap prefix) targets)
+      (kill-buffer which-key--buffer))))
+
+;; tab key to cycle target and embark actions
+;; https://github.com/oantolin/embark/wiki/Additional-Configuration
+(defun with-minibuffer-keymap (keymap)
+  (lambda (fn &rest args)
+    (minibuffer-with-setup-hook
+        (lambda ()
+          (use-local-map
+           (make-composed-keymap keymap (current-local-map))))
+      (apply fn args))))
+
+(defvar embark-completing-read-prompter-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "<tab>") 'abort-recursive-edit)
+    map))
+
+(defun embark-act-with-completing-read (&optional arg)
+  (interactive "P")
+  (let* ((embark-prompter 'embark-completing-read-prompter)
+         (act (propertize "Act" 'face 'highlight))
+         (embark-indicator (lambda (_keymap targets) nil)))
+    (embark-act arg)))
+
+(advice-add 'embark-completing-read-prompter :around
+            (with-minibuffer-keymap embark-completing-read-prompter-map))
 
 (with-eval-after-load 'embark
+  (setq embark-indicator #'embark-which-key-indicator
+        embark-keymap-prompter-key ",")
   (require 'embark-consult)
   (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode))
 
-;; keystrokes feedback
+(with-eval-after-load 'vertico
+  (define-key vertico-map (kbd "<tab>") 'embark-act-with-completing-read))
+
+;; keystrokes feedback interval
 (setq echo-keystrokes 0.02)
 
 

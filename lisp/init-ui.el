@@ -37,6 +37,16 @@
   (setq-default display-fill-column-indicator-column 80
                 display-fill-column-indicator-character ?\u254e))
 
+;;cursor type in minibuffer
+(defun p-minibuffer-cursor-type ()
+  (setq cursor-type 'hbar))
+(add-hook 'minibuffer-setup-hook 'p-minibuffer-cursor-type)
+
+;; cursor blink
+(setq blink-cursor-delay 0.2
+      blink-cursor-interval 0.3
+      blink-cursor-blinks 30)
+
 
 (provide 'init-ui)
 ;;; init-ui.el ends here

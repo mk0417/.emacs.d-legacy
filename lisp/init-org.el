@@ -27,7 +27,7 @@
       org-tags-column 80)
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "WORKING(w)" "|" "DONE(d)")))
+      '((sequence "TODO(t)" "WORKING(w)" "|" "DONE(d)" "CANCEL(c)")))
 
 (with-eval-after-load 'org
   (require 'org-tempo)
@@ -92,7 +92,7 @@
 ;; capturing
 (setq org-capture-templates
       `(("t" "todo" entry (file ,(concat org-directory "/todo.org"))
-         "* TODO %^{Title}\nSCHEDULED: %^t\n")
+         "* TODO %^{Title}\nSCHEDULED: %t\n")
         ("n" "note" entry (file ,(concat org-directory "/note.org"))
          "* %U\n")
         ("i" "idea" entry (file ,(concat org-directory "/idea.org"))

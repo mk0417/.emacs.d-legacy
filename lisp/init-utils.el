@@ -177,10 +177,8 @@
     "fp" '(p-find-file-in-config :which-key "find config file")
     "fR" '(p-rename-this-file-and-buffer :which-key "rename file")
     "e"  '(:ignore t :which-key "editing")
-    "ef" '(p-select-function :which-key "select function")
     "ed" '(p-insert-date :which-key "insert date")
     "ek" '(p-insert-uk-date :which-key "insert UK date")
-    "es" '(xah-select-block :which-key "select block")
     "ep" '(xah-replace-pairs :which-key "replace pairs")
     "et" '(p-html-region-insert-tag :which-key "insert html tag")
     "s"  '(:ignore t :which-key "search")
@@ -190,7 +188,14 @@
     "tr" '(p-reveal-file-in-finder :which-key "reveal file in finder")
     "tf" '(p-display-file-name :which-key "show file name")
     "p"  '(:ignore t :which-key "projects and packages")
-    "pS" '(p-list-installed-packages :which-key "list installed packages")))
+    "pS" '(p-list-installed-packages :which-key "list installed packages"))
+
+  (general-create-definer p-comma-leader-def
+    :prefix ","
+    :states '(normal visual))
+  (p-comma-leader-def
+    ","  '(xah-select-block :which-key "xah-select-block")
+    "."  '(p-select-function :which-key "p-select-function")))
 
 
 (provide 'init-utils)

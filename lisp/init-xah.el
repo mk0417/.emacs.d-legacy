@@ -133,7 +133,7 @@ Version 2015-10-01"
      (list (line-beginning-position) (line-end-position))))
   (let ((case-fold-search nil))
     (xah-replace-pairs-region @begin @end
-                              '(["true" "false"])
+                              '(["True" "False"])
                               'REPORT)))
 
 (defun xah-replace-false-to-true (@begin @end)
@@ -143,7 +143,7 @@ Version 2015-10-01"
      (list (line-beginning-position) (line-end-position))))
   (let ((case-fold-search nil))
     (xah-replace-pairs-region @begin @end
-                              '(["false" "true"])
+                              '(["False" "True"])
                               'REPORT)))
 
 ;; http://ergoemacs.org/emacs/elisp_change_brackets.html

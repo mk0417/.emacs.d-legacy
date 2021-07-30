@@ -27,6 +27,8 @@
 (require 'init-ui)
 (require 'init-default)
 (require 'init-theme)
+(require 'init-prot)
+(require 'init-xah)
 (require 'init-evil)
 (require 'init-git)
 (require 'init-org)
@@ -35,7 +37,6 @@
 (require 'init-minibuffer)
 (require 'init-completion)
 (require 'init-window)
-(require 'init-xah)
 (require 'init-prog)
 (require 'init-typing)
 (require 'init-utils)
@@ -45,7 +46,6 @@
 (require 'init-snippet)
 (require 'init-wrds)
 (require 'init-markdown)
-(require 'init-prot)
 
 
 (provide 'init)

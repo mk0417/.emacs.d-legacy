@@ -123,11 +123,14 @@
     "d"  '(:ignore t :which-key "dired")
     "dd" '(dired :which-key "dired directory")
     "dj" '(dired-jump :which-key "dired jump")
+    "r"  '(:ignore t :which-key "eval")
+    "rb" '(eval-buffer :which-key "eval buffer")
+    "rr" '(eval-region :which-key "eval region")
+    "rf" '(eval-defun :which-key "eval function")
+    "re" '(eval-expression :which-key "eval expression")
+    "rl" '(eval-last-sexp :which-key "eval last sexp")
     "e"  '(:ignore t :which-key "editing")
-    "ea" '(beginning-of-defun :which-key "beginning of function")
     "ec" '(whitespace-cleanup :which-key "clear whitespace")
-    "ee" '(end-of-defun :which-key "end of function")
-    "ei" '(evilmi-select-items :which-key "select item")
     "w"  '(:ignore t :which-key "window")
     "wd" '(delete-window :which-key "delete window")
     "wv" '(evil-window-vsplit :which-key "split window right")
@@ -148,12 +151,9 @@
     :prefix ","
     :states '(normal visual))
   (p-comma-leader-def
-    "e"  '(:ignore t :which-key "eval")
-    "eb" '(eval-buffer :which-key "eval buffer")
-    "er" '(eval-region :which-key "eval region")
-    "ef" '(eval-defun :which-key "eval function")
-    "ee" '(eval-expression :which-key "eval expression")
-    "el" '(eval-last-sexp :which-key "eval last sexp")))
+    "i" '(evilmi-select-items :which-key "select item")
+    "a" '(beginning-of-defun :which-key "beginning of function")
+    "e" '(end-of-defun :which-key "end of function")))
 
 
 (provide 'init-evil)

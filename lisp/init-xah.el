@@ -3,6 +3,15 @@
 (straight-use-package 'xah-replace-pairs)
 
 
+;; new scratch buffer
+(defun xah-new-empty-buffer ()
+  (interactive)
+  (let (($buf (generate-new-buffer "untitled")))
+    (switch-to-buffer $buf)
+    (funcall initial-major-mode)
+    (setq buffer-offer-save t)
+    $buf))
+
 ;; select block between blank lines
 ;; http://ergoemacs.org/emacs/modernization_mark-word.html
 (defun xah-select-block ()
@@ -64,7 +73,7 @@
 
 ;; http://ergoemacs.org/emacs/emacs_navigating_keys_for_brackets.html
 (defvar xah-brackets nil "string of left/right brackets pairs.")
-(setq xah-brackets "()[]{}<>（）［］｛｝⦅⦆〚〛⦃⦄“”‘’‹›«»「」〈〉《》【】〔〕⦗⦘『』〖〗〘〙｢｣⟦⟧⟨⟩⟪⟫⟮⟯⟬⟭⌈⌉⌊⌋⦇⦈⦉⦊❛❜❝❞❨❩❪❫❴❵❬❭❮❯❰❱❲❳〈〉⦑⦒⧼⧽﹙﹚﹛﹜﹝﹞⁽⁾₍₎⦋⦌⦍⦎⦏⦐⁅⁆⸢⸣⸤⸥⟅⟆⦓⦔⦕⦖⸦⸧⸨⸩｟｠⧘⧙⧚⧛⸜⸝⸌⸍⸂⸃⸄⸅⸉⸊᚛᚜༺༻༼༽⏜⏝⎴⎵⏞⏟⏠⏡﹁﹂﹃﹄︹︺︻︼︗︘︿﹀︽︾﹇﹈︷︸")
+(setq xah-brackets "()[]{}<>“”‘’‹›«»「」〈〉《》【】〔〕⦗⦘『』｢｣⟦⟧⟨⟩⟪⟫⟮⟯⟬⟭⌈⌉⌊⌋❨❩❪❫❴❵❬❭❮❯❰❱❲❳⸢⸣⸤⸥⸦⸧⸨⸩｟｠⸜⸝⸌⸍﹁﹂﹃﹄︹︺︻︼︗︘︿﹀︽︾﹇﹈︷︸")
 (defvar xah-left-brackets '("(" "{" "[" "<" "〔" "【" "〖" "〈" "《" "「" "『" "“" "‘" "‹" "«" ))
 (defvar xah-right-brackets '(")" "]" "}" ">" "〕" "】" "〗" "〉" "》" "」" "』" "”" "’" "›" "»"))
 
@@ -85,18 +94,10 @@
   (setq xah-right-brackets (reverse xah-right-brackets)))
 
 (defun xah-backward-left-bracket ()
-  "Move cursor to the previous occurrence of left bracket.
-The list of brackets to jump to is defined by `xah-left-brackets'.
-URL `http://ergoemacs.org/emacs/emacs_navigating_keys_for_brackets.html'
-Version 2015-10-01"
   (interactive)
   (re-search-backward (regexp-opt xah-left-brackets) nil t))
 
 (defun xah-forward-right-bracket ()
-  "Move cursor to the next occurrence of right bracket.
-The list of brackets to jump to is defined by `xah-right-brackets'.
-URL `http://ergoemacs.org/emacs/emacs_navigating_keys_for_brackets.html'
-Version 2015-10-01"
   (interactive)
   (re-search-forward (regexp-opt xah-right-brackets) nil t))
 
@@ -146,138 +147,29 @@ Version 2015-10-01"
                               '(["False" "True"])
                               'REPORT)))
 
-;; http://ergoemacs.org/emacs/elisp_change_brackets.html
-(defun xah-replace-pairs (@from-chars @to-chars)
-  (interactive
-   (let (($bracketsList
-          '("(paren)"
-            "{brace}"
-            "[square]"
-            "<greater>"
-            "`emacs'"
-            "`markdown`"
-            "~tilde~"
-            "=equal="
-            "\"ascii quote\""
-            "[[double square,2]]"
-            "“curly quote”"
-            "‘single quote’"
-            "‹french angle›"
-            "«french double angle»"
-            "「corner」"
-            "『white corner』"
-            "【lenticular】"
-            "〖white lenticular〗"
-            "〈angle〉"
-            "《double angle》"
-            "〔tortoise〕"
-            "〘white tortoise〙"
-            "⦅white paren⦆"
-            "〚white square〛"
-            "⦃white curly⦄"
-            "〈pointing angle〉"
-            "⦑ANGLE WITH DOT⦒"
-            "⧼CURVED ANGLE⧽"
-            "⟦math square⟧"
-            "⟨math angle⟩"
-            "⟪math DOUBLE ANGLE⟫"
-            "⟮math FLATTENED PARENTHESIS⟯"
-            "⟬math WHITE TORTOISE SHELL⟭"
-            "❛HEAVY SINGLE QUOTATION MARK ORNAMENT❜"
-            "❝HEAVY DOUBLE TURNED COMMA QUOTATION MARK ORNAMENT❞"
-            "❨MEDIUM LEFT PARENTHESIS ORNAMENT❩"
-            "❪MEDIUM FLATTENED LEFT PARENTHESIS ORNAMENT❫"
-            "❴MEDIUM LEFT CURLY ORNAMENT❵"
-            "❬MEDIUM LEFT-POINTING ANGLE ORNAMENT❭"
-            "❮HEAVY LEFT-POINTING ANGLE QUOTATION MARK ORNAMENT❯"
-            "❰HEAVY LEFT-POINTING ANGLE ORNAMENT❱"
-            "none"
-            )))
-     (list
-      (completing-read "Replace this:" $bracketsList )
-      (completing-read "To:" $bracketsList ))))
-  (let ( $p1 $p2 )
-    (if (use-region-p)
-        (setq $p1 (region-beginning) $p2 (region-end))
-      (save-excursion
-        (if (re-search-backward "\n[ \t]*\n" nil "move")
-            (progn (re-search-forward "\n[ \t]*\n")
-                   (setq $p1 (point)))
-          (setq $p1 (point)))
-        (if (re-search-forward "\n[ \t]*\n" nil "move")
-            (progn (re-search-backward "\n[ \t]*\n")
-                   (setq $p2 (point)))
-          (setq $p2 (point)))))
-    (save-excursion
-      (save-restriction
-        (narrow-to-region $p1 $p2)
-        (let ( (case-fold-search nil)
-               $fromLeft
-               $fromRight
-               $toLeft
-               $toRight)
-          (cond
-           ((string-match ",2" @from-chars  )
-            (progn
-              (setq $fromLeft (substring @from-chars 0 2))
-              (setq $fromRight (substring @from-chars -2))))
-           (t
-            (progn
-              (setq $fromLeft (substring @from-chars 0 1))
-              (setq $fromRight (substring @from-chars -1)))))
-          (cond
-           ((string-match ",2" @to-chars)
-            (progn
-              (setq $toLeft (substring @to-chars 0 2))
-              (setq $toRight (substring @to-chars -2))))
-           ((string-match "none" @to-chars)
-            (progn
-              (setq $toLeft "")
-              (setq $toRight "")))
-           (t
-            (progn
-              (setq $toLeft (substring @to-chars 0 1))
-              (setq $toRight (substring @to-chars -1)))))
-          (cond
-           ((string-match "markdown" @from-chars)
-            (progn
-              (goto-char (point-min))
-              (while
-                  (re-search-forward "`\\([^`]+?\\)`" nil t)
-                (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
-                (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
-           ((string-match "tilde" @from-chars)
-            (progn
-              (goto-char (point-min))
-              (while
-                  (re-search-forward "~\\([^~]+?\\)~" nil t)
-                (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
-                (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
-           ((string-match "ascii quote" @from-chars)
-            (progn
-              (goto-char (point-min))
-              (while
-                  (re-search-forward "\"\\([^\"]+?\\)\"" nil t)
-                (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
-                (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
-           ((string-match "equal" @from-chars)
-            (progn
-              (goto-char (point-min))
-              (while
-                  (re-search-forward "=\\([^=]+?\\)=" nil t)
-                (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
-                (replace-match (concat $toLeft "\\1" $toRight ) "FIXEDCASE" ))))
-           (t (progn
-                (progn
-                  (goto-char (point-min))
-                  (while (search-forward $fromLeft nil t)
-                    (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
-                    (replace-match $toLeft "FIXEDCASE" "LITERAL")))
-                (progn
-                  (goto-char (point-min))
-                  (while (search-forward $fromRight nil t)
-                    (overlay-put (make-overlay (match-beginning 0) (match-end 0)) 'face 'highlight)
-                    (replace-match $toRight "FIXEDCASE" "LITERAL")))))))))))
+(with-eval-after-load 'evil
+  (define-key evil-normal-state-map (kbd "nf")  'xah-forward-right-bracket)
+  (define-key evil-normal-state-map (kbd "nb")  'xah-backward-left-bracket)
+  (define-key evil-normal-state-map (kbd "nF")  'xah-replace-paren-to-bracket)
+  (define-key evil-normal-state-map (kbd "nP")  'xah-replace-bracket-to-paren)
+  (define-key evil-normal-state-map (kbd "nt")  'xah-replace-true-to-false)
+  (define-key evil-normal-state-map (kbd "nT")  'xah-replace-false-to-true)
+
+  (define-key evil-visual-state-map (kbd "nF")  'xah-replace-paren-to-bracket)
+  (define-key evil-visual-state-map (kbd "nP")  'xah-replace-bracket-to-paren)
+
+  (general-create-definer p-space-leader-def
+    :prefix "SPC"
+    :states '(normal visual))
+  (p-space-leader-def
+    "b"  '(:ignore t :which-key "buffer")
+    "bn"  '(xah-new-empty-buffer :which-key "new buffer"))
+
+  (general-create-definer p-comma-leader-def
+    :prefix ","
+    :states '(normal visual))
+  (p-comma-leader-def
+    ","  '(xah-select-block :which-key "xah-select-block")))
 
 
 (provide 'init-xah)

@@ -2,7 +2,10 @@
 
 (straight-use-package 'auctex)
 (straight-use-package 'latex-preview-pane)
+(straight-use-package 'evil-tex)
 
+
+(add-hook 'LaTeX-mode-hook #'evil-tex-mode)
 
 (with-eval-after-load 'evil
   (general-create-definer p-latex-leader-def

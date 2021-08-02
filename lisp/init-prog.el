@@ -2,7 +2,10 @@
 
 (straight-use-package 'jupyter)
 (straight-use-package 'ess)
-(straight-use-package '(ess-stata-mode :type git :host github :repo "emacs-ess/ess-stata-mode"))
+(straight-use-package '(ess-stata-mode
+                        :type git
+                        :host github
+                        :repo "emacs-ess/ess-stata-mode"))
 
 
 ;; Jupyter

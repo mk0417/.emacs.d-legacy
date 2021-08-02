@@ -12,7 +12,7 @@
       modus-themes-fringes 'intense
       modus-themes-hl-line 'intense
       modus-themes-paren-match '(intense bold underline)
-      modus-themes-region 'bg-only)
+      modus-themes-region '(no-extend accented))
 
 (setq modus-themes-org-agenda
       '((header-block . (variable-pitch scale-title))
@@ -31,9 +31,6 @@
 
 (modus-themes-load-themes)
 (modus-themes-load-vivendi)
-
-;; selected text color
-(set-face-attribute 'region nil :background "#696969")
 
 
 (provide 'init-theme)

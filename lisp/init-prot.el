@@ -6,14 +6,9 @@
     (indent . "^[\s\t]+")
     (non-empty . "^.+$")
     (list . "^\\([\s\t#*+]+\\|[0-9]+[^\s]?[).]+\\)")
-    (heading . "^[=-]+"))
-  "Alist of regexp types used by `prot-common-line-regexp-p'.")
+    (heading . "^[=-]+")))
 
 (defun prot-common-line-regexp-p (type &optional n)
-  "Test for TYPE on line.
-TYPE is the car of a cons cell in `prot-common--line-regexp-alist'.
-It matches a regular expression.
-With optional N, search in the Nth line from point."
   (save-excursion
     (goto-char (point-at-bol))
     (and (not (bobp))
@@ -23,8 +18,8 @@ With optional N, search in the Nth line from point."
             (alist-get type prot-common--line-regexp-alist))))))
 
 (defcustom prot-comment-comment-keywords
-  '("TODO" "NOTE" "XXX" "REVIEW" "FIXME")
   "List of strings with comment keywords."
+  '("TODO" "NOTE" "XXX" "REVIEW" "FIXME")
   :type '(repeat string)
   :group 'prot-comment)
 
@@ -43,7 +38,6 @@ Refer to the doc string of `format-time-string' for the available options."
   "Input history of selected comment keywords.")
 
 (defun prot-comment--keyword-prompt (keywords)
-  "Prompt for candidate among KEYWORDS."
   (let ((def (car prot-comment--keyword-hist)))
     (completing-read
      (format "Select keyword [%s]: " def)
@@ -85,14 +79,8 @@ specified by `prot-comment-timestamp-format-verbose'."
      ((or (eq beg (point-at-bol))
           (prot-common-line-regexp-p 'empty))
       (let* ((maybe-newline (unless (prot-common-line-regexp-p 'empty 1) "\n")))
-        ;; NOTE 2021-07-24: we use this `insert' instead of
-        ;; `comment-region' because of a yet-to-be-determined bug that
-        ;; traps `undo' to the two states between the insertion of the
-        ;; string and its transformation into a comment.
         (insert
          (concat comment-start
-                 ;; NOTE 2021-07-24: See function `comment-add' for
-                 ;; why we need this.
                  (make-string
                   (comment-add nil)
                   (string-to-char comment-start))
@@ -110,7 +98,6 @@ specified by `prot-comment-timestamp-format-verbose'."
 ;; narrow dwim
 ;;;###autoload
 (defun prot-common-window-bounds ()
-  "Determine start and end points in the window."
   (list (save-excursion
           (move-to-window-line 0)
           (point))
@@ -120,8 +107,6 @@ specified by `prot-comment-timestamp-format-verbose'."
 
 ;;;###autoload
 (defun prot-simple-narrow-visible-window ()
-  "Narrow buffer to wisible window area.
-Also check `prot-simple-narrow-dwim'."
   (interactive)
   (let* ((bounds (prot-common-window-bounds))
          (window-area (- (cadr bounds) (car bounds)))

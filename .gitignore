@@ -5,3 +5,4 @@ custom.el
 /transient
 /auto-save-list
 projectile-bookmarks.eld
+.bookmarks.el

@@ -148,21 +148,13 @@
 
 (with-eval-after-load 'evil
   (define-key evil-normal-state-map (kbd "C-i") 'p-delete-backward-to-tab)
-  (define-key evil-normal-state-map (kbd "nf")  'xah-forward-right-bracket)
-  (define-key evil-normal-state-map (kbd "nb")  'xah-backward-left-bracket)
-  (define-key evil-normal-state-map (kbd "nF")  'xah-replace-paren-to-bracket)
-  (define-key evil-normal-state-map (kbd "nP")  'xah-replace-bracket-to-paren)
-  (define-key evil-normal-state-map (kbd "nt")  'xah-replace-true-to-false)
-  (define-key evil-normal-state-map (kbd "nT")  'xah-replace-false-to-true)
   (define-key evil-normal-state-map (kbd "goe") 'p-surround-equal)
   (define-key evil-normal-state-map (kbd "goa") 'p-surround-asterisk)
   (define-key evil-normal-state-map (kbd "goi") 'p-surround-slash)
 
-  (define-key evil-visual-state-map (kbd "nF")  'xah-replace-paren-to-bracket)
-  (define-key evil-visual-state-map (kbd "nP")  'xah-replace-bracket-to-paren)
   (define-key evil-visual-state-map (kbd "goe") 'p-surround-equal)
   (define-key evil-visual-state-map (kbd "goa") 'p-surround-asterisk)
-  (define-key evil-visual-state-map (kbd "gos") 'p-surround-slash)
+  (define-key evil-visual-state-map (kbd "goi") 'p-surround-slash)
 
   (define-key evil-insert-state-map (kbd "C-u") 'p-kill-to-begin-of-line)
   (define-key evil-insert-state-map (kbd "C-i") 'p-delete-backward-to-tab)
@@ -179,7 +171,6 @@
     "e"  '(:ignore t :which-key "editing")
     "ed" '(p-insert-date :which-key "insert date")
     "ek" '(p-insert-uk-date :which-key "insert UK date")
-    "ep" '(xah-replace-pairs :which-key "replace pairs")
     "et" '(p-html-region-insert-tag :which-key "insert html tag")
     "s"  '(:ignore t :which-key "search")
     "sg" '(p-google-search :which-key "search on google")
@@ -194,7 +185,6 @@
     :prefix ","
     :states '(normal visual))
   (p-comma-leader-def
-    ","  '(xah-select-block :which-key "xah-select-block")
     "."  '(p-select-function :which-key "p-select-function")))
 
 

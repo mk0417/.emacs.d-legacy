@@ -1,6 +1,10 @@
 ;;; init-minibuffer.el --- Config for minibuffer completion -*- lexical-binding: t; -*-
 
-(straight-use-package 'vertico)
+(straight-use-package '(vertico
+                        :type git
+                        :host github
+                        :repo "minad/vertico"
+                        :files ("*.el" "extensions/*.el")))
 (straight-use-package 'marginalia)
 (straight-use-package 'orderless)
 (straight-use-package 'consult)
@@ -29,17 +33,24 @@
 (setq completion-styles '(substring orderless))
 
 ;; consult
-(setq consult-imenu-config
-      '((emacs-lisp-mode :toplevel "Functions"
-                         :types ((?f "Functions" font-lock-function-name-face)
-                                 (?m "Macros"    font-lock-keyword-face)
-                                 (?p "Packages"  font-lock-constant-face)
-                                 (?t "Types"     font-lock-type-face)
-                                 (?v "Variables" font-lock-variable-name-face)))))
-
-(setq-default consult-project-root-function 'projectile-project-root)
-
 (with-eval-after-load 'consult
+  (setq-default consult-project-root-function 'projectile-project-root)
+
+  (setq consult-narrow-key "<"
+        consult-line-numbers-widen t
+        consult-async-min-input 2
+        consult-async-refresh-delay  0.15
+        consult-async-input-throttle 0.2
+        consult-async-input-debounce 0.1)
+
+  (setq consult-imenu-config
+        '((emacs-lisp-mode :toplevel "Functions"
+                           :types ((?f "Functions" font-lock-function-name-face)
+                                   (?m "Macros"    font-lock-keyword-face)
+                                   (?p "Packages"  font-lock-constant-face)
+                                   (?t "Types"     font-lock-type-face)
+                                   (?v "Variables" font-lock-variable-name-face)))))
+
   (defmacro p-no-consult-preview (&rest cmds)
     `(with-eval-after-load 'consult
        (consult-customize ,@cmds :preview-key (kbd "M-v"))))
@@ -169,6 +180,8 @@
     "b"  '(:ignore t :which-key "buffer")
     "bb" '(consult-buffer :which-key "consult switch buffer")
     "bo" '(consult-buffer-other-window :which-key "open file in another window")
+    "e"  '(:ignore t :which-key "editing")
+    "er" '(vertico-repeat :which-key "vertico-repeat")
     "s"  '(:ignore t :which-key "search")
     "ss" '(consult-line :which-key "consult line")
     "sS" '(p-consult-at-point-line :which-key "consult at-point line")

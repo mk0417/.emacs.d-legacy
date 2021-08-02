@@ -12,7 +12,8 @@
 ;; evil
 (setq evil-undo-system 'undo-redo
       evil-symbol-word-search t
-      evil-respect-visual-line-mode t)
+      evil-respect-visual-line-mode t
+      evil-want-C-u-scroll t)
 (add-hook 'after-init-hook 'evil-mode)
 
 (with-eval-after-load 'evil
@@ -63,10 +64,9 @@
     (let ((region (buffer-substring beg end)))
       (evil-ex (concat "%s/" (replace-regexp-in-string "\/" "\\\\/" (regexp-quote region)) "/"))))
 
-  (define-key evil-normal-state-map (kbd "C-.") nil)
+
   (define-key evil-normal-state-map (kbd "S-c") nil)
   (define-key evil-normal-state-map (kbd "C-e") 'evil-end-of-line)
-  (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
   (define-key evil-normal-state-map (kbd "gl")  'evil-shift-right)
   (define-key evil-normal-state-map (kbd "gh")  'evil-shift-left)
   (define-key evil-normal-state-map (kbd "gcc") 'evilnc-comment-or-uncomment-lines)
@@ -79,6 +79,7 @@
   (define-key evil-visual-state-map (kbd "gcc") 'evilnc-comment-or-uncomment-lines)
   (define-key evil-visual-state-map (kbd "gcy") 'evilnc-copy-and-comment-lines)
   (define-key evil-visual-state-map (kbd "gor") 'p-ex-evil-selection-replace)
+  (define-key evil-visual-state-map (kbd "goc") 'start-ex-sub-on-region)
 
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "C-a") 'evil-beginning-of-line)
@@ -129,8 +130,10 @@
     "rf" '(eval-defun :which-key "eval function")
     "re" '(eval-expression :which-key "eval expression")
     "rl" '(eval-last-sexp :which-key "eval last sexp")
+    "rs" '(shell-command :which-key "shell command")
     "e"  '(:ignore t :which-key "editing")
     "ec" '(whitespace-cleanup :which-key "clear whitespace")
+    "ea" '(align-regexp :which-key "align-regexp")
     "w"  '(:ignore t :which-key "window")
     "wd" '(delete-window :which-key "delete window")
     "wv" '(evil-window-vsplit :which-key "split window right")

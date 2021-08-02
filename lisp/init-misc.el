@@ -6,7 +6,10 @@
 (straight-use-package 'smartparens)
 (straight-use-package 'avy)
 (straight-use-package 'htmlize)
-(straight-use-package '(color-rg :type git :host github :repo "manateelazycat/color-rg"))
+(straight-use-package '(color-rg
+                        :type git
+                        :host github
+                        :repo "manateelazycat/color-rg"))
 
 
 ;; whitespace

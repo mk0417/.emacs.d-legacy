@@ -92,7 +92,7 @@
 ;; capturing
 (setq org-capture-templates
       `(("t" "todo" entry (file ,(concat org-directory "/todo.org"))
-         "* TODO %^{Title}\nSCHEDULED: %t\n")
+         "* TODO %^{Title}\nSCHEDULED: %^t\n")
         ("n" "note" entry (file ,(concat org-directory "/note.org"))
          "* %U\n")
         ("i" "idea" entry (file ,(concat org-directory "/idea.org"))

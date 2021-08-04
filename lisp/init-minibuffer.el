@@ -116,54 +116,25 @@
 
 ;; embark which-key integration
 ;; https://github.com/oantolin/embark/wiki/Additional-Configuration
-(defun embark-which-key-indicator (keymap targets)
-  (which-key--show-keymap
-   (if (eq (caar targets) 'embark-become)
-       "Become"
-     (format "Act on %s '%s'%s"
-             (caar targets)
-             (embark--truncate-target (cdar targets))
-             (if (cdr targets) "…" "")))
-   keymap
-   nil nil t)
-  (lambda (prefix)
-    (if prefix
-        (embark-which-key-indicator (lookup-key keymap prefix) targets)
-      (kill-buffer which-key--buffer))))
-
-;; tab key to cycle target and embark actions
-;; https://github.com/oantolin/embark/wiki/Additional-Configuration
-(defun with-minibuffer-keymap (keymap)
-  (lambda (fn &rest args)
-    (minibuffer-with-setup-hook
-        (lambda ()
-          (use-local-map
-           (make-composed-keymap keymap (current-local-map))))
-      (apply fn args))))
-
-(defvar embark-completing-read-prompter-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "<tab>") 'abort-recursive-edit)
-    map))
-
-(defun embark-act-with-completing-read (&optional arg)
-  (interactive "P")
-  (let* ((embark-prompter 'embark-completing-read-prompter)
-         (act (propertize "Act" 'face 'highlight))
-         (embark-indicator (lambda (_keymap targets) nil)))
-    (embark-act arg)))
-
-(advice-add 'embark-completing-read-prompter :around
-            (with-minibuffer-keymap embark-completing-read-prompter-map))
+(defun embark-which-key-indicator ()
+  (lambda (&optional keymap targets prefix)
+    (if (null keymap)
+        (kill-buffer which-key--buffer)
+      (which-key--show-keymap
+       (if (eq (caar targets) 'embark-become)
+           "Become"
+         (format "Act on %s '%s'%s"
+                 (caar targets)
+                 (embark--truncate-target (cdar targets))
+                 (if (cdr targets) "…" "")))
+       (if prefix (lookup-key keymap prefix) keymap)
+       nil nil t))))
 
 (with-eval-after-load 'embark
   (setq embark-indicator #'embark-which-key-indicator
         embark-keymap-prompter-key ",")
   (require 'embark-consult)
   (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode))
-
-(with-eval-after-load 'vertico
-  (define-key vertico-map (kbd "<tab>") 'embark-act-with-completing-read))
 
 ;; keystrokes feedback interval
 (setq echo-keystrokes 0.02)

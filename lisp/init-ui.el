@@ -47,6 +47,18 @@
       blink-cursor-interval 0.3
       blink-cursor-blinks 30)
 
+;; titlebar
+(push '(ns-transparent-titlebar . t) default-frame-alist)
+
+(if (< emacs-major-version 28)
+    (setq frame-title-format
+          '((:eval (if (buffer-file-name)
+                       (concat " " (abbreviate-file-name (buffer-file-name)))
+                     " %b"))))
+  ;; https://emacs.stackexchange.com/questions/33680/how-to-remove-the-icon-in-the-titlebar
+  (setq frame-title-format nil
+        us-use-proxy-icon nil))
+
 
 (provide 'init-ui)
 ;;; init-ui.el ends here

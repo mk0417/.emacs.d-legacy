@@ -21,16 +21,17 @@
   (setq-default projectile-generic-command "rg --files --hidden"))
 
 ;; citre
+(require 'citre-config)
+
 (defun citre-jump+ ()
   "Jump to the definition of the symbol at point. Fallback to `xref-find-definitions'."
   (interactive)
   (condition-case _ (citre-jump)
     (error (call-interactively #'xref-find-definitions))))
 
-(add-hook 'prog-mode #'citre-auto-enable-citre-mode)
-
-(setq citre-readtags-program "/usr/local/bin/readtags"
-      citre-ctags-program "/usr/local/bin/ctags"
+(setq citre-readtags-program (executable-find "readtags")
+      citre-ctags-program (executable-find "ctags")
+      citre-auto-enable-citre-mode-modes '(prog-mode)
       citre-completion-case-sensitive nil
       citre-use-project-root-when-creating-tags t
       citre-prompt-language-for-ctags-command t)

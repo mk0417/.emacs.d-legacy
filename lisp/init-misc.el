@@ -6,6 +6,7 @@
 (straight-use-package 'smartparens)
 (straight-use-package 'avy)
 (straight-use-package 'htmlize)
+(straight-use-package 'elisp-demos)
 (straight-use-package '(color-rg
                         :type git
                         :host github
@@ -68,6 +69,10 @@
 
 (with-eval-after-load 'evil
   (evil-set-initial-state 'color-rg-mode 'emacs))
+
+;; elisp-demos
+(advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
+
 
 ;; keybindings
 (with-eval-after-load 'evil

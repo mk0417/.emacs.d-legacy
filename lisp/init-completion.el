@@ -27,10 +27,6 @@
 (setq company-frontends '(company-pseudo-tooltip-frontend
                           company-echo-metadata-frontend))
 
-(setq company-backends '((company-capf)
-                         (company-dabbrev-code company-keywords company-files)
-                         company-dabbrev))
-
 (autoload 'company-mode "company")
 
 (add-hook 'after-init-hook 'global-company-mode)

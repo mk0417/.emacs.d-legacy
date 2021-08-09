@@ -22,7 +22,7 @@
     "m"  '(dired-mark-files-regexp :which-key "mark file by regex")
     "M"  '(dired-mark-files-containing-regexp :which-key "mark file containing by regex")
     "c"  '(dired-do-copy :which-key "copy file")
-    "r"  '(dired-rename-file :which-key "rename file")
+    "r"  '(dired-do-rename :which-key "rename file")
     "p"  '(dired-up-directory :which-key "parent directory")
     "n"  '(dired-create-empty-file :which-key "add new file")
     "N"  '(dired-create-directory :which-key "add new directory")

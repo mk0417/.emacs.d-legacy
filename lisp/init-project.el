@@ -36,9 +36,13 @@
       citre-use-project-root-when-creating-tags t
       citre-prompt-language-for-ctags-command t)
 
+(with-eval-after-load 'citre
+  (diminish 'citre-mode))
+
 (with-eval-after-load 'projectile
   (setq citre-project-root-function #'projectile-project-root)
-  (diminish 'citre-mode))
+  (setq projectile-mode-line-function '(lambda () (format " Proj[%s]" (projectile-project-name)))))
+
 
 ;; keybindings
 (with-eval-after-load 'evil

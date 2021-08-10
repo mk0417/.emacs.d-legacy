@@ -81,21 +81,21 @@
 
 (defun p-consult-rg-at-point-project (&optional dir)
   (interactive)
-  (consult--grep "Ripgrep" consult-ripgrep-command dir (thing-at-point 'symbol)))
+  (consult--grep "Ripgrep" #'consult--ripgrep-builder dir (thing-at-point 'symbol)))
 
 (defun p-consult-rg-current-dir (&optional initial)
   (interactive "P")
   (if (equal buffer-file-name nil)
-      (consult--grep "Ripgrep current dir" consult-ripgrep-command "/Users/ml/" initial)
-    (consult--grep "Ripgrep current dir" consult-ripgrep-command (file-name-directory buffer-file-name) initial)))
+      (consult--grep "Ripgrep current dir" #'consult--ripgrep-builder "/Users/ml/" initial)
+    (consult--grep "Ripgrep current dir" #'consult--ripgrep-builder (file-name-directory buffer-file-name) initial)))
 
 (defun p-consult-rg-other-dir (&optional initial)
   (interactive "P")
-  (consult--grep "Ripgrep current dir" consult-ripgrep-command (read-directory-name "consult-rg directory:") initial))
+  (consult--grep "Ripgrep current dir" #'consult--ripgrep-builder (read-directory-name "consult-rg directory:") initial))
 
 (defun p-consult-rg-at-point-current-dir ()
   (interactive)
-  (consult--grep "Ripgrep current dir" consult-ripgrep-command (file-name-directory buffer-file-name) (thing-at-point 'symbol)))
+  (consult--grep "Ripgrep current dir" #'consult--ripgrep-builder (file-name-directory buffer-file-name) (thing-at-point 'symbol)))
 
 (defun p-consult-fd-local (&optional dir initial)
   (interactive "P")

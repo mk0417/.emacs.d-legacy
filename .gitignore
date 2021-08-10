@@ -6,3 +6,4 @@ custom.el
 /auto-save-list
 projectile-bookmarks.eld
 .bookmarks.el
+company-statistics-cache.el

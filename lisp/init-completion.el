@@ -1,6 +1,7 @@
 ;;; init-completion.el --- Completion framework -*- lexical-binding: t -*-
 
 (straight-use-package 'company)
+(straight-use-package 'company-statistics)
 
 
 ;; company
@@ -29,6 +30,7 @@
 (add-hook 'after-init-hook 'global-company-mode)
 
 (with-eval-after-load 'company
+  (company-statistics-mode)
   (custom-set-faces
    '(company-preview-common
      ((t (:inherit company-preview))))

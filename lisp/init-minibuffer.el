@@ -130,9 +130,48 @@
        (if prefix (lookup-key keymap prefix) keymap)
        nil nil t))))
 
+;; use <tab> to switch between candidates and actions
+(defun with-minibuffer-keymap (keymap)
+  (lambda (fn &rest args)
+    (minibuffer-with-setup-hook
+        (lambda ()
+          (use-local-map
+           (make-composed-keymap keymap (current-local-map))))
+      (apply fn args))))
+
+(defvar embark-completing-read-prompter-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "<tab>") 'abort-recursive-edit)
+    map))
+
+(advice-add 'embark-completing-read-prompter :around
+            (with-minibuffer-keymap embark-completing-read-prompter-map))
+
+(defun embark-act-with-completing-read (&optional arg)
+  (interactive "P")
+  (let* ((embark-prompter 'embark-completing-read-prompter)
+         (act (propertize "Act" 'face 'highlight))
+         (embark-indicator (lambda (_keymap targets) nil)))
+    (embark-act arg)))
+
+;; colorize the current vertico candidate differently when acting
+(defun embark-vertico-indicator ()
+  (let ((fr face-remapping-alist))
+    (lambda (&optional keymap _targets prefix)
+      (when (bound-and-true-p vertico--input)
+        (setq-local face-remapping-alist
+                    (if keymap
+                        (cons '(vertico-current . embark-target) fr)
+                      fr))))))
+
+;; config customized features
+(with-eval-after-load 'vertico
+  (define-key vertico-map (kbd "<tab>") 'embark-act-with-completing-read))
+
 (with-eval-after-load 'embark
   (setq embark-indicator #'embark-which-key-indicator
         embark-keymap-prompter-key ",")
+  (add-to-list 'embark-indicators #'embark-vertico-indicator)
   (require 'embark-consult)
   (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode))
 

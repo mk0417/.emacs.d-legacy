@@ -24,9 +24,6 @@
                                  gud-mode
                                  vterm-mode))
 
-(setq company-frontends '(company-pseudo-tooltip-frontend
-                          company-echo-metadata-frontend))
-
 (autoload 'company-mode "company")
 
 (add-hook 'after-init-hook 'global-company-mode)

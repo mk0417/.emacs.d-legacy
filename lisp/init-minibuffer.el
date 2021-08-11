@@ -58,7 +58,8 @@
                         consult-git-grep
                         consult-grep
                         consult-bookmark
-                        consult-recent-file consult-xref
+                        consult-recent-file
+                        consult-xref
                         consult--source-file
                         consult--source-project-file
                         consult--source-bookmark
@@ -114,46 +115,6 @@
 (global-set-key (kbd "C-,") 'embark-act)
 (global-set-key (kbd "C-c C-o") 'embark-export)
 
-;; embark which-key integration
-;; https://github.com/oantolin/embark/wiki/Additional-Configuration
-(defun embark-which-key-indicator ()
-  (lambda (&optional keymap targets prefix)
-    (if (null keymap)
-        (kill-buffer which-key--buffer)
-      (which-key--show-keymap
-       (if (eq (caar targets) 'embark-become)
-           "Become"
-         (format "Act on %s '%s'%s"
-                 (caar targets)
-                 (embark--truncate-target (cdar targets))
-                 (if (cdr targets) "…" "")))
-       (if prefix (lookup-key keymap prefix) keymap)
-       nil nil t))))
-
-;; use <tab> to switch between candidates and actions
-(defun with-minibuffer-keymap (keymap)
-  (lambda (fn &rest args)
-    (minibuffer-with-setup-hook
-        (lambda ()
-          (use-local-map
-           (make-composed-keymap keymap (current-local-map))))
-      (apply fn args))))
-
-(defvar embark-completing-read-prompter-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "<tab>") 'abort-recursive-edit)
-    map))
-
-(advice-add 'embark-completing-read-prompter :around
-            (with-minibuffer-keymap embark-completing-read-prompter-map))
-
-(defun embark-act-with-completing-read (&optional arg)
-  (interactive "P")
-  (let* ((embark-prompter 'embark-completing-read-prompter)
-         (act (propertize "Act" 'face 'highlight))
-         (embark-indicator (lambda (_keymap targets) nil)))
-    (embark-act arg)))
-
 ;; colorize the current vertico candidate differently when acting
 (defun embark-vertico-indicator ()
   (let ((fr face-remapping-alist))
@@ -164,13 +125,8 @@
                         (cons '(vertico-current . embark-target) fr)
                       fr))))))
 
-;; config customized features
-(with-eval-after-load 'vertico
-  (define-key vertico-map (kbd "<tab>") 'embark-act-with-completing-read))
-
 (with-eval-after-load 'embark
-  (setq embark-indicator #'embark-which-key-indicator
-        embark-keymap-prompter-key ",")
+  (setq embark-keymap-prompter-key ",")
   (add-to-list 'embark-indicators #'embark-vertico-indicator)
   (require 'embark-consult)
   (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode))

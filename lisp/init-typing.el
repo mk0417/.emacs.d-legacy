@@ -9,8 +9,9 @@
 (with-eval-after-load 'evil
   (dolist (m (list evil-insert-state-map evil-ex-completion-map minibuffer-mode-map))
     (key-chord-define m "kk" "()\C-b")
-    (key-chord-define m ",," "[]\C-b")
+    (key-chord-define m "ff" "[]\C-b")
     (key-chord-define m "hh" "{}\C-b")
+    (key-chord-define m ",," "[[]]\C-b\C-b")
     (key-chord-define m "gt" "!")
     (key-chord-define m "qa" "@")
     (key-chord-define m "lk" "$")

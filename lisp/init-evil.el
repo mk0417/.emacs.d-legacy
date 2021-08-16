@@ -72,7 +72,7 @@
   (define-key evil-normal-state-map (kbd "gcc") 'evilnc-comment-or-uncomment-lines)
   (define-key evil-normal-state-map (kbd "gcy") 'evilnc-copy-and-comment-lines)
   (define-key evil-normal-state-map (kbd "gor") 'p-ex-evil-buffer-replace)
-  (define-key evil-normal-state-map (kbd "goc") 'start-ex-sub-on-region)
+  (define-key evil-normal-state-map (kbd "gox") 'start-ex-sub-on-region)
 
   (define-key evil-visual-state-map (kbd "C-e") 'evil-end-of-line)
   (define-key evil-visual-state-map (kbd "C-b") 'backward-char)

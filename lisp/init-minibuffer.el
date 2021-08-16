@@ -10,6 +10,7 @@
 (straight-use-package 'consult)
 (straight-use-package 'embark)
 (straight-use-package 'embark-consult)
+(straight-use-package 'consult-dir)
 
 
 ;; vertico
@@ -136,6 +137,9 @@
 
 
 ;; keybindings
+(global-set-key (kbd "C-c C-d") 'consult-dir)
+(global-set-key (kbd "C-c C-j") 'consult-dir-jump-file)
+
 (with-eval-after-load 'evil
   (general-create-definer p-space-leader-def
     :prefix "SPC"
@@ -143,6 +147,7 @@
   (p-space-leader-def
     "f"  '(:ignore t :which-key "file")
     "fr" '(consult-recent-file :which-key "recent file")
+    "fd" '(consult-dir :which-key "find directory")
     "b"  '(:ignore t :which-key "buffer")
     "bb" '(consult-buffer :which-key "consult switch buffer")
     "bo" '(consult-buffer-other-window :which-key "open file in another window")

@@ -85,6 +85,12 @@
     (kill-line 0)
     (insert "    ")))
 
+;; clear line
+(defun p-clear-line ()
+  (interactive)
+  (beginning-of-line)
+  (kill-line))
+
 ;; add four spaces
 (defun p-insert-spaces ()
   (interactive)
@@ -151,6 +157,7 @@
   (define-key evil-normal-state-map (kbd "goe") 'p-surround-equal)
   (define-key evil-normal-state-map (kbd "goa") 'p-surround-asterisk)
   (define-key evil-normal-state-map (kbd "goi") 'p-surround-slash)
+  (define-key evil-normal-state-map (kbd "goc") 'p-clear-line)
 
   (define-key evil-visual-state-map (kbd "goe") 'p-surround-equal)
   (define-key evil-visual-state-map (kbd "goa") 'p-surround-asterisk)

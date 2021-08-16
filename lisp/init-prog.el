@@ -6,6 +6,7 @@
                         :type git
                         :host github
                         :repo "emacs-ess/ess-stata-mode"))
+(straight-use-package 'ein)
 
 
 ;; Jupyter

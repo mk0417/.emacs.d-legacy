@@ -11,6 +11,10 @@
                         :type git
                         :host github
                         :repo "manateelazycat/color-rg"))
+(straight-use-package '(puni
+                        :type git
+                        :host github
+                        :repo "AmaiKinono/puni"))
 
 
 ;; whitespace
@@ -73,6 +77,87 @@
 ;; elisp-demos
 (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
 
+;; puni
+(puni-global-mode)
+(define-key puni-mode-map (kbd "C-k") nil)
+(define-key puni-mode-map (kbd "C-w") nil)
+
+(defun puni--backward-char-with-spaces ()
+  (puni--backward-syntax " ")
+  (condition-case _
+      (progn (forward-char -1) (point))
+    (error nil)))
+
+(defun puni--bounds-of-sexp-at-point ()
+  (save-excursion
+    (let ((end (or (puni-strict-forward-sexp)
+                   (point)))
+          (beg (or (puni-strict-backward-sexp)
+                   (point))))
+      (cons beg end))))
+
+(defun puni--bounds-of-sexps-around-point ()
+  (save-excursion
+    (let ((beg (progn (puni-beginning-of-sexp)
+                      (point)))
+          (end (progn (puni-end-of-sexp)
+                      (point))))
+      (cons beg end))))
+
+(defun puni--find-bigger-balanced-region (beg end)
+  (let ((new-beg beg)
+        new-end done err)
+    (save-excursion
+      (while (and (not done) (not err))
+        (goto-char new-beg)
+        (setq new-end (puni-strict-forward-sexp))
+        (if (and new-end (> new-end end))
+            (setq done t)
+          (setq new-beg (progn (goto-char new-beg)
+                               (puni--backward-char-with-spaces)))
+          (unless new-beg
+            (setq err t))))
+      (if (and done (not err))
+          (cons new-beg new-end)
+        (cons beg end)))))
+
+(defun puni--set-region (beg end)
+  (if (and (use-region-p)
+           (> (mark) (point)))
+      (progn (set-mark end)
+             (goto-char beg)
+             (activate-mark))
+    (set-mark beg)
+    (goto-char end)
+    (activate-mark)))
+
+(defun puni--expand-region (beg end)
+  (pcase-let*
+      ((`(,sexp-beg . ,sexp-end) (save-excursion
+                                   (goto-char beg)
+                                   (puni--bounds-of-sexp-at-point)))
+       (`(,sexps-beg . ,sexps-end) (save-excursion
+                                     (goto-char beg)
+                                     (puni--bounds-of-sexps-around-point))))
+    (cond
+     ((<= beg sexps-beg)
+      (let ((region (puni--find-bigger-balanced-region beg end)))
+        (puni--set-region (car region) (cdr region))))
+     ((and (< sexps-beg beg) (<= beg sexp-beg))
+      (puni--set-region sexps-beg sexps-end))
+     (t
+      (puni--set-region sexp-beg sexp-end)))))
+
+(defun puni-expand-region ()
+  (interactive)
+  (if (use-region-p)
+      (puni--expand-region (region-beginning) (region-end))
+    (pcase-let
+        ((`(,sexp-beg . ,sexp-end) (puni--bounds-of-sexp-at-point)))
+      (if (eq sexp-beg sexp-end)
+          (puni--expand-region sexp-beg sexp-end)
+        (puni--set-region sexp-beg sexp-end)))))
+
 
 ;; keybindings
 (with-eval-after-load 'evil
@@ -105,7 +190,18 @@
     "rr" '(anzu-query-replace-regexp :which-key "query-replace-regex")
     "rR" '(anzu-query-replace :which-key "query-replace")
     "rb" '(anzu-query-replace-at-cursor :which-key "query-replace-at-point")
-    "rf" '(anzu-query-replace-at-cursor-thing :which-key "query-replace-at-point-func")))
+    "rf" '(anzu-query-replace-at-cursor-thing :which-key "query-replace-at-point-func")
+    "p"  '(:ignore t :which-key "puni")
+    "pf" '(puni-forward-sexp :which-key "puni-forward-sexp")
+    "pb" '(puni-backward-sexp :which-key "puni-backward-sexp")
+    "pa" '(puni-beginning-of-sexp :which-key "puni-beginning-of-sexp")
+    "pe" '(puni-end-of-sexp :which-key "puni-end-of-sexp")
+    "p," '(puni-syntactic-forward-punct :which-key "puni-syntactic-forward-punct")
+    "p." '(puni-syntactic-backward-punct :which-key "puni-syntactic-backward-punct")
+    "pk" '(puni-kill-line :which-key "puni-kill-line")
+    "pp" '(puni-expand-region :which-key "puni-expand-region")
+    "pw" '(puni-backward-kill-word :which-key "puni-backward-kill-word")
+    "pe" '(puni-forward-kill-word :which-key "puni-forward-kill-word")))
 
 
 (provide 'init-misc)

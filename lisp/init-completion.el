@@ -25,6 +25,10 @@
                                  gud-mode
                                  vterm-mode))
 
+;; remove duplicate candidate.
+(with-eval-after-load 'company
+  (add-to-list 'company-transformers #'delete-dups))
+
 (autoload 'company-mode "company")
 
 (add-hook 'after-init-hook 'global-company-mode)

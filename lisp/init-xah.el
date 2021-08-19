@@ -147,6 +147,31 @@
                               '(["False" "True"])
                               'REPORT)))
 
+(defun xah-beginning-of-line-or-block ()
+  (interactive)
+  (let (($p (point)))
+    (if (or (equal (point) (line-beginning-position))
+            (equal last-command this-command ))
+        (if (re-search-backward "\n[\t\n ]*\n+" nil "NOERROR")
+            (progn
+              (skip-chars-backward "\n\t ")
+              (forward-char ))
+          (goto-char (point-min)))
+      (progn
+        (back-to-indentation)
+        (when (eq $p (point))
+          (beginning-of-line))))))
+
+(defun xah-end-of-line-or-block ()
+  (interactive)
+  (if (or (equal (point) (line-end-position))
+          (equal last-command this-command ))
+      (progn
+        (re-search-forward "\n[\t\n ]*\n+" nil "NOERROR" ))
+    (end-of-line)))
+
+
+;; keybindings
 (with-eval-after-load 'evil
   (define-key evil-normal-state-map (kbd "nf")  'xah-forward-right-bracket)
   (define-key evil-normal-state-map (kbd "nb")  'xah-backward-left-bracket)
@@ -154,9 +179,13 @@
   (define-key evil-normal-state-map (kbd "nP")  'xah-replace-bracket-to-paren)
   (define-key evil-normal-state-map (kbd "nt")  'xah-replace-true-to-false)
   (define-key evil-normal-state-map (kbd "nT")  'xah-replace-false-to-true)
+  (define-key evil-normal-state-map (kbd "na")  'xah-beginning-of-line-or-block)
+  (define-key evil-normal-state-map (kbd "ne")  'xah-end-of-line-or-block)
 
   (define-key evil-visual-state-map (kbd "nF")  'xah-replace-paren-to-bracket)
   (define-key evil-visual-state-map (kbd "nP")  'xah-replace-bracket-to-paren)
+  (define-key evil-visual-state-map (kbd "na")  'xah-beginning-of-line-or-block)
+  (define-key evil-visual-state-map (kbd "ne")  'xah-end-of-line-or-block)
 
   (general-create-definer p-space-leader-def
     :prefix "SPC"

@@ -24,7 +24,6 @@
 (require 'citre-config)
 
 (defun citre-jump+ ()
-  "Jump to the definition of the symbol at point. Fallback to `xref-find-definitions'."
   (interactive)
   (condition-case _ (citre-jump)
     (error (call-interactively #'xref-find-definitions))))

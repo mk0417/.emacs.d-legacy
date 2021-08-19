@@ -126,8 +126,24 @@
                         (cons '(vertico-current . embark-target) fr)
                       fr))))))
 
+;; embark action integration with which-key
+(defun embark-which-key-indicator ()
+  (lambda (&optional keymap targets prefix)
+    (if (null keymap)
+        (kill-buffer which-key--buffer)
+      (which-key--show-keymap
+       (if (eq (caar targets) 'embark-become)
+           "Become"
+         (format "Act on %s '%s'%s"
+                 (plist-get (car targets) :type)
+                 (embark--truncate-target (plist-get (car targets) :target))
+                 (if (cdr targets) "…" "")))
+       (if prefix (lookup-key keymap prefix) keymap)
+       nil nil t))))
+
 (with-eval-after-load 'embark
   (setq embark-keymap-prompter-key ",")
+  (setq embark-indicators '(embark-which-key-indicator embark-highlight-indicator embark-isearch-highlight-indicator))
   (add-to-list 'embark-indicators #'embark-vertico-indicator)
   (require 'embark-consult)
   (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode))

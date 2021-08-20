@@ -82,12 +82,35 @@
 (define-key puni-mode-map (kbd "C-k") nil)
 (define-key puni-mode-map (kbd "C-w") nil)
 
-(defun puni--backward-char-with-spaces ()
-  (puni--backward-syntax " ")
-  (condition-case _
-      (progn (forward-char -1) (point))
-    (error nil)))
+;; https://github.com/AmaiKinono/puni/wiki/Useful-commands
+(defun puni-mark-sexp-around-point ()
+  (interactive)
+  (let (beg end)
+    (save-excursion
+      (when (setq beg (puni-up-list 'backward))
+        (setq end (puni-strict-forward-sexp))))
+    (when (and beg end)
+      (set-mark beg)
+      (goto-char end)
+      (activate-mark))))
 
+(defun puni-my-kill-line ()
+  (interactive)
+  (let ((forward-line (lambda ()
+                        (if (eolp) (forward-char) (end-of-line))))
+        (backward-line (lambda ()
+                         (if (bolp) (forward-char -1) (beginning-of-line)))))
+    (and
+     (or (puni-soft-delete-by-move forward-line 'strict-sexp 'beyond 'kill)
+         (puni-soft-delete-by-move backward-line 'strict-sexp 'beyond 'kill)
+         (save-excursion
+           (let (beg end)
+             (when (setq beg (puni-up-list 'backward))
+               (setq end (puni-strict-forward-sexp)))
+             (when (and beg end)
+               (puni-delete-region beg end 'kill))))))))
+
+;; https://github.com/AmaiKinono/puni/wiki/The-Puni-version-of-expand-region
 (defun puni--bounds-of-sexp-at-point ()
   (save-excursion
     (let ((end (or (puni-strict-forward-sexp)
@@ -105,19 +128,12 @@
       (cons beg end))))
 
 (defun puni--find-bigger-balanced-region (beg end)
-  (let ((new-beg beg)
-        new-end done err)
+  (let (new-beg new-end)
     (save-excursion
-      (while (and (not done) (not err))
-        (goto-char new-beg)
-        (setq new-end (puni-strict-forward-sexp))
-        (if (and new-end (> new-end end))
-            (setq done t)
-          (setq new-beg (progn (goto-char new-beg)
-                               (puni--backward-char-with-spaces)))
-          (unless new-beg
-            (setq err t))))
-      (if (and done (not err))
+      (goto-char beg)
+      (setq new-beg (puni-up-list 'backward))
+      (setq new-end (puni-strict-forward-sexp))
+      (if (and new-beg new-end)
           (cons new-beg new-end)
         (cons beg end)))))
 
@@ -201,7 +217,9 @@
     "pk" '(puni-kill-line :which-key "puni-kill-line")
     "pp" '(puni-expand-region :which-key "puni-expand-region")
     "pw" '(puni-backward-kill-word :which-key "puni-backward-kill-word")
-    "pe" '(puni-forward-kill-word :which-key "puni-forward-kill-word")))
+    "pe" '(puni-forward-kill-word :which-key "puni-forward-kill-word")
+    "pm" '(puni-mark-sexp-around-point :which-key "puni-mark-sexp-around-point")
+    "pd" '(puni-my-kill-line :which-key "puni-my-kill-line")))
 
 
 (provide 'init-misc)

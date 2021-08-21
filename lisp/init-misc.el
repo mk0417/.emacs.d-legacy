@@ -79,8 +79,14 @@
 
 ;; puni
 (puni-global-mode)
+
+;; overwrite puni default keybindings
 (define-key puni-mode-map (kbd "C-k") nil)
 (define-key puni-mode-map (kbd "C-w") nil)
+
+(autoload 'puni-mark-sexp-around-point "puni")
+(autoload 'puni-my-kill-line "puni")
+(autoload 'puni-expand-region "puni")
 
 ;; https://github.com/AmaiKinono/puni/wiki/Useful-commands
 (defun puni-mark-sexp-around-point ()

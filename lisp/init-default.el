@@ -101,6 +101,7 @@
 (global-set-key (kbd "C-x K") 'kill-buffer-and-window)
 (global-set-key (kbd "C-w") 'backward-kill-word)
 (global-set-key (kbd "C-c C-u") 'universal-argument)
+(global-set-key (kbd "C-c C-e") 'occur-edit-mode)
 (define-key minibuffer-mode-map (kbd "C-k") 'delete-backward-char)
 
 (straight-use-package 'diminish)

@@ -11,6 +11,7 @@
 (straight-use-package 'embark)
 (straight-use-package 'embark-consult)
 (straight-use-package 'consult-dir)
+(straight-use-package 'fzf)
 
 
 ;; vertico
@@ -101,13 +102,13 @@
 
 (defun p-consult-fd-local (&optional dir initial)
   (interactive "P")
-  (let ((consult-find-command "fd --color=never --full-path ARG OPTS"))
+  (if (equal buffer-file-name nil)
+      (consult-find "~/" initial)
     (consult-find dir initial)))
 
 (defun p-consult-fd-global (&optional initial)
   (interactive "P")
-  (let ((consult-find-command "fd --color=never --full-path ARG OPTS"))
-    (consult-find "~/" initial)))
+  (consult-find (read-directory-name "consult-find directory:") initial))
 
 ;; embark
 (autoload 'embark-act "embark")

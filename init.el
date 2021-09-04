@@ -46,6 +46,7 @@
 (require 'init-snippet)
 (require 'init-wrds)
 (require 'init-markdown)
+(require 'init-org-roam)
 
 
 (provide 'init)

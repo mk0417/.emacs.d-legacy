@@ -85,6 +85,7 @@
 (define-key puni-mode-map (kbd "C-w") nil)
 
 (autoload 'puni-strict-forward-sexp "puni")
+(autoload 'puni-soft-delete-by-move "puni")
 
 ;; https://github.com/AmaiKinono/puni/wiki/Useful-commands
 (defun puni-mark-sexp-around-point ()

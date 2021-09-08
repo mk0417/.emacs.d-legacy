@@ -88,17 +88,6 @@
 (autoload 'puni-soft-delete-by-move "puni")
 
 ;; https://github.com/AmaiKinono/puni/wiki/Useful-commands
-(defun puni-mark-sexp-around-point ()
-  (interactive)
-  (let (beg end)
-    (save-excursion
-      (when (setq beg (puni-up-list 'backward))
-        (setq end (puni-strict-forward-sexp))))
-    (when (and beg end)
-      (set-mark beg)
-      (goto-char end)
-      (activate-mark))))
-
 (defun puni-my-kill-line ()
   (interactive)
   (let ((forward-line (lambda ()
@@ -115,88 +104,26 @@
              (when (and beg end)
                (puni-delete-region beg end 'kill))))))))
 
-;; https://github.com/AmaiKinono/puni/wiki/The-Puni-version-of-expand-region
-(defun puni--bounds-of-sexp-at-point ()
-  (save-excursion
-    (let ((end (or (puni-strict-forward-sexp)
-                   (point)))
-          (beg (or (puni-strict-backward-sexp)
-                   (point))))
-      (cons beg end))))
-
-(defun puni--bounds-of-sexps-around-point ()
-  (save-excursion
-    (let ((beg (progn (puni-beginning-of-sexp)
-                      (point)))
-          (end (progn (puni-end-of-sexp)
-                      (point))))
-      (cons beg end))))
-
-(defun puni--find-bigger-balanced-region (beg end)
-  (let (new-beg new-end)
-    (save-excursion
-      (goto-char beg)
-      (setq new-beg (puni-up-list 'backward))
-      (setq new-end (puni-strict-forward-sexp))
-      (if (and new-beg new-end)
-          (cons new-beg new-end)
-        (cons beg end)))))
-
-(defun puni--set-region (beg end)
-  (if (and (use-region-p)
-           (> (mark) (point)))
-      (progn (set-mark end)
-             (goto-char beg)
-             (activate-mark))
-    (set-mark beg)
-    (goto-char end)
-    (activate-mark)))
-
-(defun puni--expand-region (beg end)
-  (pcase-let*
-      ((`(,sexp-beg . ,sexp-end) (save-excursion
-                                   (goto-char beg)
-                                   (puni--bounds-of-sexp-at-point)))
-       (`(,sexps-beg . ,sexps-end) (save-excursion
-                                     (goto-char beg)
-                                     (puni--bounds-of-sexps-around-point))))
-    (cond
-     ((<= beg sexps-beg)
-      (let ((region (puni--find-bigger-balanced-region beg end)))
-        (puni--set-region (car region) (cdr region))))
-     ((and (< sexps-beg beg) (<= beg sexp-beg))
-      (puni--set-region sexps-beg sexps-end))
-     (t
-      (puni--set-region sexp-beg sexp-end)))))
-
-(defun puni-expand-region ()
-  (interactive)
-  (if (use-region-p)
-      (puni--expand-region (region-beginning) (region-end))
-    (pcase-let
-        ((`(,sexp-beg . ,sexp-end) (puni--bounds-of-sexp-at-point)))
-      (if (eq sexp-beg sexp-end)
-          (puni--expand-region sexp-beg sexp-end)
-        (puni--set-region sexp-beg sexp-end)))))
-
 
 ;; keybindings
 (with-eval-after-load 'evil
   (define-key evil-normal-state-map (kbd "nc")  'avy-goto-char-2)
   (define-key evil-normal-state-map (kbd "nl")  'avy-goto-line)
   (define-key evil-normal-state-map (kbd "ny")  'avy-kill-ring-save-region)
-  (define-key evil-normal-state-map (kbd "goo") 'sp-raise-sexp)
-  (define-key evil-normal-state-map (kbd "got") 'sp-transpose-sexp)
-  (define-key evil-normal-state-map (kbd "goj") 'sp-join-sexp)
-  (define-key evil-normal-state-map (kbd "gos") 'sp-split-sexp)
-  (define-key evil-normal-state-map (kbd "nd")  'sp-down-sexp)
-  (define-key evil-normal-state-map (kbd "nD")  'sp-up-sexp)
+  (define-key evil-normal-state-map (kbd "goo") 'puni-raise)
+  (define-key evil-normal-state-map (kbd "got") 'puni-transpose)
+  (define-key evil-normal-state-map (kbd "gos") 'puni-split)
+  (define-key evil-normal-state-map (kbd "gov") 'puni-convolute)
+  (define-key evil-normal-state-map (kbd "gof") 'puni-barf-forward)
+  (define-key evil-normal-state-map (kbd "gob") 'puni-barf-backward)
+  (define-key evil-normal-state-map (kbd "nd")  'puni-syntactic-forward-punct)
+  (define-key evil-normal-state-map (kbd "nD")  'puni-syntactic-backward-punct)
 
   (general-create-definer p-comma-leader-def
     :prefix ","
     :states '(normal visual))
   (p-comma-leader-def
-    "d" '(sp-splice-sexp :which-key "sp-splice-sexp")
+    "d" '(puni-splice :which-key "puni-splice")
     "k" '(p-add-paren :which-key "p-add-paren")
     "f" '(p-add-bracket :which-key "p-add-bracket")
     "h" '(p-add-curly :which-key "p-add-curly")
@@ -217,13 +144,14 @@
     "pb" '(puni-backward-sexp :which-key "puni-backward-sexp")
     "pa" '(puni-beginning-of-sexp :which-key "puni-beginning-of-sexp")
     "pe" '(puni-end-of-sexp :which-key "puni-end-of-sexp")
-    "p," '(puni-syntactic-forward-punct :which-key "puni-syntactic-forward-punct")
-    "p." '(puni-syntactic-backward-punct :which-key "puni-syntactic-backward-punct")
     "pk" '(puni-kill-line :which-key "puni-kill-line")
     "pp" '(puni-expand-region :which-key "puni-expand-region")
     "pw" '(puni-backward-kill-word :which-key "puni-backward-kill-word")
     "pe" '(puni-forward-kill-word :which-key "puni-forward-kill-word")
     "pm" '(puni-mark-sexp-around-point :which-key "puni-mark-sexp-around-point")
+    "p." '(puni-mark-sexp-at-point :which-key "puni-mark-sexp-at-point")
+    "p," '(puni-mark-list-around-point :which-key "puni-mark-list-at-point")
+    "ps" '(puni-squeeze :which-key "puni-squeeze")
     "pd" '(puni-my-kill-line :which-key "puni-my-kill-line")))
 
 

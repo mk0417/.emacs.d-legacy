@@ -4,10 +4,9 @@
 
 (setq modus-themes-bold-constructs t
       modus-themes-italic-constructs t
-      modus-themes-syntax '(green-strings alt-syntax)
       modus-themes-links '(faint bold background)
       modus-themes-prompts '(bold background)
-      modus-themes-mode-line '(accented moody)
+      modus-themes-mode-line '(moody)
       modus-themes-completions 'opinionated
       modus-themes-fringes 'intense
       modus-themes-hl-line 'intense

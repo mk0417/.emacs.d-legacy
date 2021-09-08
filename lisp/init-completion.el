@@ -5,6 +5,10 @@
 
 
 ;; company
+(setq company-backends
+      '((company-files company-keywords company-capf company-yasnippet)
+        (company-abbrev company-dabbrev)))
+
 (setq company-idle-delay 0
       company-auto-complete nil
       company-auto-complete-chars nil

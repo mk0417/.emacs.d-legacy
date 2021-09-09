@@ -18,8 +18,8 @@
             (alist-get type prot-common--line-regexp-alist))))))
 
 (defcustom prot-comment-comment-keywords
-  "List of strings with comment keywords."
   '("TODO" "NOTE" "XXX" "REVIEW" "FIXME")
+  "List of strings with comment keywords."
   :type '(repeat string)
   :group 'prot-comment)
 

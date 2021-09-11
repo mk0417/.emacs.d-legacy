@@ -106,6 +106,10 @@
 
 
 ;; keybindings
+(global-set-key (kbd "C-c M-f") 'anzu-query-replace)
+(global-set-key (kbd "C-c M-r") 'anzu-query-replace-regexp)
+(global-set-key (kbd "C-c M-a") 'anzu-query-replace-at-cursor)
+
 (with-eval-after-load 'evil
   (define-key evil-normal-state-map (kbd "nc")  'avy-goto-char-2)
   (define-key evil-normal-state-map (kbd "nl")  'avy-goto-line)

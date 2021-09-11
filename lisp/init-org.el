@@ -35,14 +35,18 @@
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.8))
   (add-to-list 'org-structure-template-alist '("b" . "src shell"))
   (add-to-list 'org-structure-template-alist '("p" . "src elisp"))
-  (add-to-list 'org-structure-template-alist '("j" . "src python :session py :eval no-export")))
+  (add-to-list 'org-structure-template-alist '("j" . "src jupyter-python :session py :eval no-export")))
 
 (with-eval-after-load 'ob
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (shell . t)
-     (python . t))))
+     (python . t)
+     (jupyter . t)))
+  (org-babel-jupyter-override-src-block "python"))
+
+(setq ob-async-no-async-languages-alist '("python" "jupyter-python"))
 
 ;; org-superstar
 (add-hook 'org-mode-hook 'org-superstar-mode)

@@ -18,6 +18,7 @@
     (setq comp-deferred-compilation t
           comp-async-jobs-number 6
           comp-async-report-warnings-errors nil
+          native-comp-async-report-warnings-errors nil
           compilation-scroll-output t
           package-native-compile t
           load-prefer-newer t))

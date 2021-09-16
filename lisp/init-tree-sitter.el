@@ -11,6 +11,8 @@
 (require 'tree-sitter)
 (require 'tree-sitter-langs)
 
+(diminish 'tree-sitter-mode)
+
 (global-tree-sitter-mode)
 
 ;; enable highlight

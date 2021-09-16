@@ -47,7 +47,7 @@
 (require 'init-wrds)
 (require 'init-markdown)
 (require 'init-org-roam)
-(require 'init-tree-sitter)
+;; (require 'init-tree-sitter)
 
 
 (provide 'init)

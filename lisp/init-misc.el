@@ -43,6 +43,9 @@
   (sp-with-modes '(lisp-mode emacs-lisp-mode lisp-interaction-mode)
     (sp-local-pair "'" nil :actions nil))
 
+  (sp-with-modes '(markdown-mode)
+    (sp-local-pair "`" nil :actions nil))
+
   (defun p-add-paren ()
     (interactive)
     (sp-wrap-with-pair "("))

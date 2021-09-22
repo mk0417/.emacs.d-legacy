@@ -120,7 +120,7 @@
     "br" '(revert-buffer :which-key "revert buffer")
     "bs" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :which-key "switch to scratch")
     "bm" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :which-key "switch to messages")
-    "`"  '((lambda () (interactive) (switch-to-buffer nil)) :which-key "switch to pervious buffer")
+    ","  '((lambda () (interactive) (switch-to-buffer nil)) :which-key "switch to pervious buffer")
     "d"  '(:ignore t :which-key "dired")
     "dd" '(dired :which-key "dired directory")
     "dj" '(dired-jump :which-key "dired jump")

@@ -14,8 +14,8 @@
 ;; font
 (set-face-font 'default "Hack")
 
-;; left fringe only
-(fringe-mode '(8 . 0))
+;; no fringe
+(fringe-mode '(0 . 0))
 
 ;; highlight current line
 (global-hl-line-mode 1)

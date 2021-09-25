@@ -15,10 +15,14 @@
 ;;; diff-hl
 (autoload 'diff-hl-mode "diff-hl")
 
+(add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
 (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 (add-hook 'dired-mode-hook 'diff-hl-dired-mode)
-(add-hook 'prog-mode-hook 'diff-hl-mode)
-(add-hook 'conf-mode-hook 'diff-hl-mode)
+
+(dolist (hook '(prog-mode-hook conf-mode-hook markdown-mode-hook))
+  (add-hook hook (lambda ()
+                   (diff-hl-mode)
+                   (diff-hl-margin-mode))))
 
 ;; git-messenger
 (setq git-messenger:show-detail t

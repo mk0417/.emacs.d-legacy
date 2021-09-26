@@ -12,7 +12,13 @@
 (menu-bar-mode -1)
 
 ;; header-line
-(setq-default header-line-format '("%F - %f   %I"))
+(defun p-header-line-init ()
+  (interactive)
+  (if (equal buffer-file-truename nil)
+      (setq-default header-line-format '("[%F]"))
+    (setq-default header-line-format (list "[%F]" '(:eval (format "  %s" buffer-file-truename))))))
+
+(add-hook 'buffer-list-update-hook 'p-header-line-init)
 
 ;; font
 (set-face-font 'default "Hack")

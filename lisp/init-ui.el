@@ -11,6 +11,9 @@
   (set-scroll-bar-mode nil))
 (menu-bar-mode -1)
 
+;; header-line
+(setq-default header-line-format '("%F - %f   %I"))
+
 ;; font
 (set-face-font 'default "Hack")
 

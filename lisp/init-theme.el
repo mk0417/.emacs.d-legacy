@@ -31,6 +31,18 @@
 (modus-themes-load-themes)
 (modus-themes-load-vivendi)
 
+;; header-line background
+(defun p-modus-header-line-bg ()
+  (interactive)
+  (custom-set-faces
+   (let ((mytheme (symbol-name (car custom-enabled-themes))))
+     (when (equal mytheme "modus-vivendi")
+       '(header-line ((t (:background "#2c2c2c")))))
+     (when (equal mytheme "modus-operandi")
+       '(header-line ((t (:background "#d5d5d5"))))))))
+
+(add-hook 'after-init-hook 'p-modus-header-line-bg)
+
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

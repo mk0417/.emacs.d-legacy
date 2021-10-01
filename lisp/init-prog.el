@@ -7,6 +7,7 @@
                         :host github
                         :repo "emacs-ess/ess-stata-mode"))
 (straight-use-package 'ein)
+(straight-use-package 'elpy)
 
 
 ;; Jupyter
@@ -39,23 +40,65 @@
 
   (add-hook 'python-mode-hook 'display-fill-column-indicator-mode)
 
+  ;; elpy
+  (elpy-enable)
+
+  ;; solve issue: send-region shows ^G
+  ;; https://github.com/jorgenschaefer/elpy/issues/1550#issuecomment-478448647
+  (setq python-shell-interpreter "ipython"
+        python-shell-interpreter-args "--simple-prompt -c exec('__import__(\\'readline\\')') -i"
+        python-shell-prompt-detect-failure-warning nil
+        ;; disable completion warning
+        ;; https://github.com/jorgenschaefer/elpy/issues/887
+        python-shell-completion-native-enable nil
+        elpy-rpc-virtualenv-path 'current)
+
+  ;; disable flymake in Python
+  ;; https://github.com/jorgenschaefer/elpy/issues/828
+  (remove-hook 'elpy-modules 'elpy-module-flymake)
+
+  ;; disable highlight indentation
+  ;; https://stackoverflow.com/questions/45214116/how-to-disable-emacs-elpy-vertical-guide-lines-for-indentation
+  (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
+
+  ;; single line eldoc
+  (setq eldoc-echo-area-use-multiline-p nil)
+
+  ;; send current line
+  (defun p-elpy-shell-send-line ()
+    (interactive)
+    (progn
+      (end-of-line)
+      (set-mark (line-beginning-position)))
+    (elpy-shell-send-region-or-buffer)
+    (beginning-of-line)
+    (keyboard-quit))
+
+  ;; keybindings
+  (define-key python-mode-map "\C-c\C-j" 'p-elpy-shell-send-line)
+
   (general-create-definer p-python-leader-def
     :prefix ";"
     :states '(normal visual)
     :keymaps 'python-mode-map)
   (p-python-leader-def
-   "j"  '(:ignore t :which-key "jupyter")
-   "jj" 'jupyter-run-repl
-   "jr" 'jupyter-eval-line-or-region
-   "jf" 'jupyter-eval-defun
-   "je" 'p-jupyter-eval-block
-   "jR" 'jupyter-repl-restart-kernel
-   "jK" 'jupyter-repl-clear-cells
-   "jI" 'jupyter-repl-interrupt-kernel
-   "ji" 'jupyter-inspect-at-point
-   "jC" 'jupyter-eval-remove-overlays
-   "jc" 'p-jupyter-remove-line-overlay
-   "jw" 'jupyter-repl-pop-to-buffer))
+    "j"  '(:ignore t :which-key "jupyter")
+    "jj" 'jupyter-run-repl
+    "jr" 'jupyter-eval-line-or-region
+    "jf" 'jupyter-eval-defun
+    "je" 'p-jupyter-eval-block
+    "jR" 'jupyter-repl-restart-kernel
+    "jK" 'jupyter-repl-clear-cells
+    "jI" 'jupyter-repl-interrupt-kernel
+    "ji" 'jupyter-inspect-at-point
+    "jC" 'jupyter-eval-remove-overlays
+    "jc" 'p-jupyter-remove-line-overlay
+    "jw" 'jupyter-repl-pop-to-buffer
+    "e"  '(:ignore t :which-key "elpy")
+    "ep" 'run-python
+    "eg" 'elpy-shell-send-group-and-step
+    "el" 'p-elpy-shell-send-line
+    "er" 'elpy-shell-send-region-or-buffer))
 
 
 ;; R
@@ -83,10 +126,10 @@
     :keymaps 'ess-mode-map)
   (p-ess-leader-def
    "a"  'ess-cycle-assign
-   "e"  '(:ignore t :which-key "eval")
-   "ef" 'ess-eval-function
-   "el" 'ess-eval-line
-   "er" 'ess-eval-region-or-line-and-step))
+   "j"  '(:ignore t :which-key "eval")
+   "jf" 'ess-eval-function
+   "jl" 'ess-eval-line
+   "jr" 'ess-eval-region-or-line-and-step))
 
 
 (provide 'init-prog)

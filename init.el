@@ -48,6 +48,8 @@
 (require 'init-markdown)
 ;; (require 'init-org-roam)
 ;; (require 'init-tree-sitter)
+(require 'init-toki-editing)
+(require 'init-toki-blink)
 
 
 (provide 'init)

@@ -11,10 +11,6 @@
                         :type git
                         :host github
                         :repo "manateelazycat/color-rg"))
-(straight-use-package '(puni
-                        :type git
-                        :host github
-                        :repo "AmaiKinono/puni"))
 
 
 ;; whitespace
@@ -80,33 +76,6 @@
 ;; elisp-demos
 (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
 
-;; puni
-(puni-global-mode)
-
-;; overwrite puni default keybindings
-(define-key puni-mode-map (kbd "C-k") nil)
-(define-key puni-mode-map (kbd "C-w") nil)
-
-(autoload 'puni-strict-forward-sexp "puni")
-(autoload 'puni-soft-delete-by-move "puni")
-
-;; https://github.com/AmaiKinono/puni/wiki/Useful-commands
-(defun puni-my-kill-line ()
-  (interactive)
-  (let ((forward-line (lambda ()
-                        (if (eolp) (forward-char) (end-of-line))))
-        (backward-line (lambda ()
-                         (if (bolp) (forward-char -1) (beginning-of-line)))))
-    (and
-     (or (puni-soft-delete-by-move forward-line 'strict-sexp 'beyond 'kill)
-         (puni-soft-delete-by-move backward-line 'strict-sexp 'beyond 'kill)
-         (save-excursion
-           (let (beg end)
-             (when (setq beg (puni-up-list 'backward))
-               (setq end (puni-strict-forward-sexp)))
-             (when (and beg end)
-               (puni-delete-region beg end 'kill))))))))
-
 
 ;; keybindings
 (global-set-key (kbd "C-c M-f") 'anzu-query-replace)
@@ -117,22 +86,11 @@
   (define-key evil-normal-state-map (kbd "nc")  'avy-goto-char-2)
   (define-key evil-normal-state-map (kbd "nl")  'avy-goto-line)
   (define-key evil-normal-state-map (kbd "ny")  'avy-kill-ring-save-region)
-  (define-key evil-normal-state-map (kbd "goo") 'puni-raise)
-  (define-key evil-normal-state-map (kbd "got") 'puni-transpose)
-  (define-key evil-normal-state-map (kbd "gos") 'puni-split)
-  (define-key evil-normal-state-map (kbd "gov") 'puni-convolute)
-  (define-key evil-normal-state-map (kbd "gof") 'puni-barf-forward)
-  (define-key evil-normal-state-map (kbd "gob") 'puni-barf-backward)
-  (define-key evil-normal-state-map (kbd "gol") 'puni-forward-sexp)
-  (define-key evil-normal-state-map (kbd "goh") 'puni-backward-sexp)
-  (define-key evil-normal-state-map (kbd "nd")  'puni-syntactic-forward-punct)
-  (define-key evil-normal-state-map (kbd "nD")  'puni-syntactic-backward-punct)
 
   (general-create-definer p-comma-leader-def
     :prefix ","
     :states '(normal visual))
   (p-comma-leader-def
-    "d" '(puni-splice :which-key "puni-splice")
     "k" '(p-add-paren :which-key "p-add-paren")
     "f" '(p-add-bracket :which-key "p-add-bracket")
     "h" '(p-add-curly :which-key "p-add-curly")
@@ -147,19 +105,7 @@
     "rr" '(anzu-query-replace-regexp :which-key "query-replace-regex")
     "rR" '(anzu-query-replace :which-key "query-replace")
     "rb" '(anzu-query-replace-at-cursor :which-key "query-replace-at-point")
-    "rf" '(anzu-query-replace-at-cursor-thing :which-key "query-replace-at-point-func")
-    "p"  '(:ignore t :which-key "puni")
-    "pa" '(puni-beginning-of-sexp :which-key "puni-beginning-of-sexp")
-    "pe" '(puni-end-of-sexp :which-key "puni-end-of-sexp")
-    "pk" '(puni-kill-line :which-key "puni-kill-line")
-    "pp" '(puni-expand-region :which-key "puni-expand-region")
-    "pb" '(puni-backward-kill-word :which-key "puni-backward-kill-word")
-    "pw" '(puni-forward-kill-word :which-key "puni-forward-kill-word")
-    "pm" '(puni-mark-sexp-around-point :which-key "puni-mark-sexp-around-point")
-    "p." '(puni-mark-sexp-at-point :which-key "puni-mark-sexp-at-point")
-    "p," '(puni-mark-list-around-point :which-key "puni-mark-list-at-point")
-    "ps" '(puni-squeeze :which-key "puni-squeeze")
-    "pd" '(puni-my-kill-line :which-key "puni-my-kill-line")))
+    "rf" '(anzu-query-replace-at-cursor-thing :which-key "query-replace-at-point-func")))
 
 
 (provide 'init-misc)

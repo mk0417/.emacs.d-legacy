@@ -31,15 +31,15 @@
   ;; change and delete are sluggish, so disable them
   ;; https://github.com/edkolev/evil-goggles/issues/18
   (setq evil-goggles-pulse t
-        evil-goggles-duration 0.5
+        evil-goggles-duration 0.35
         evil-goggles-enable-substitute nil
         evil-goggles-enable-change nil
         evil-goggles-enable-delete nil)
   (evil-goggles-mode)
   (diminish 'evil-goggles-mode)
   (custom-set-faces
-   '(evil-goggles-paste-face ((t (:background "#5dace0"))))
-   '(evil-goggles-yank-face ((t (:background "#5dace0")))))
+   '(evil-goggles-paste-face ((t (:background "#cf5a65"))))
+   '(evil-goggles-yank-face ((t (:background "#cf5a65")))))
 
   ;; change cursor type and color
   ;; https://github.com/hlissner/doom-emacs/issues/1848

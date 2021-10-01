@@ -39,6 +39,7 @@
 
 (with-eval-after-load 'company
   (company-statistics-mode)
+
   (custom-set-faces
    '(company-preview-common
      ((t (:inherit company-preview))))
@@ -50,6 +51,7 @@
      ((t (:background "#ffeead" :foreground "red"))))
    '(company-tooltip-common
      ((t (:background "#ffeead" :foreground "black")))))
+
   (define-key company-mode-map   (kbd "C-j") 'company-complete)
   (define-key company-mode-map   [remap completion-at-point] 'company-complete)
   (define-key company-mode-map   [remap indent-for-tab-command] 'company-indent-or-complete-common)

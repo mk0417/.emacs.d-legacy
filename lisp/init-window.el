@@ -13,18 +13,23 @@
               switch-window-timeout nil)
 
 ;; popper
-(setq popper-mode-line nil)
+(setq popper-mode-line
+      '(:eval (propertize " POP" 'face 'mode-line-emphasis)))
+
 (setq popper-reference-buffers
       '("\\*Messages\\*"
         "Output\\*$"
         "\\*Warnings\\*$"
+        "\\*Python Doc\\*$"
         "\\*Backtrace\\*$"
         "\\*Shell Command Output\\*$"
         "\\*Compile-Log\\*$"
         "\\*Async Shell Command\\*"
         "^\\*jupyter-"
         help-mode
+        debugger-mode
         compilation-mode))
+
 (popper-mode 1)
 
 (defun p-popper-window-height (win)
@@ -34,6 +39,14 @@
 
 (setq popper-window-height 'p-popper-window-height)
 
+(add-to-list 'display-buffer-alist
+             '("\\*Python Doc\\*$"
+               (display-buffer-in-side-window)
+               (side . right)
+               (window-width 50)))
+
+
+;; keybindings
 (with-eval-after-load 'evil
   (general-create-definer p-space-leader-def
     :prefix "SPC"

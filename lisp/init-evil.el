@@ -49,7 +49,7 @@
         evil-visual-state-cursor '(hollow "#cf5a65"))
 
   ;; stay normal state in occur buffer
-  (dolist (mode '(occur-mode help-mode))
+  (dolist (mode '(occur-mode help-mode debugger-mode))
     (evil-set-initial-state mode 'normal))
 
   ;; ex-evil replace

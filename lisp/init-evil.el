@@ -18,7 +18,8 @@
 
 (with-eval-after-load 'evil
   (setq evilmi-shortcut "m")
-  (add-hook 'prog-mode-hook 'turn-on-evil-matchit-mode)
+  (dolist (hook '(prog-mode-hook markdown-mode-hook org-mode-hook))
+    (add-hook hook 'turn-on-evil-matchit-mode))
 
   (global-evil-surround-mode 1)
 

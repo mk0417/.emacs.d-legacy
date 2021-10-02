@@ -49,7 +49,8 @@
         evil-visual-state-cursor '(hollow "#cf5a65"))
 
   ;; stay normal state in occur buffer
-  (evil-set-initial-state 'occur-mode 'normal)
+  (dolist (mode '(occur-mode help-mode))
+    (evil-set-initial-state mode 'normal))
 
   ;; ex-evil replace
   (defun p-ex-evil-buffer-replace ()
@@ -121,7 +122,8 @@
     "br" '(revert-buffer :which-key "revert buffer")
     "bs" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :which-key "switch to scratch")
     "bm" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :which-key "switch to messages")
-    ","  '((lambda () (interactive) (switch-to-buffer nil)) :which-key "switch to pervious buffer")
+    "§"  '((lambda () (interactive) (switch-to-buffer nil)) :which-key "switch to pervious buffer")
+    "`"  '((lambda () (interactive) (switch-to-buffer nil)) :which-key "switch to pervious buffer")
     "d"  '(:ignore t :which-key "dired")
     "dd" '(dired :which-key "dired directory")
     "dj" '(dired-jump :which-key "dired jump")

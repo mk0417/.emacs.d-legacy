@@ -42,6 +42,14 @@
   (sp-with-modes '(markdown-mode)
     (sp-local-pair "`" nil :actions nil))
 
+  (defun p-add-single-quote ()
+    (interactive)
+    (sp-wrap-with-pair "'"))
+
+  (defun p-add-double-quote ()
+    (interactive)
+    (sp-wrap-with-pair "\""))
+
   (defun p-add-paren ()
     (interactive)
     (sp-wrap-with-pair "("))
@@ -83,9 +91,14 @@
 (global-set-key (kbd "C-c M-a") 'anzu-query-replace-at-cursor)
 
 (with-eval-after-load 'evil
-  (define-key evil-normal-state-map (kbd "nc")  'avy-goto-char-2)
-  (define-key evil-normal-state-map (kbd "nl")  'avy-goto-line)
-  (define-key evil-normal-state-map (kbd "ny")  'avy-kill-ring-save-region)
+  (define-key evil-normal-state-map (kbd "nc") 'avy-goto-char-2)
+  (define-key evil-normal-state-map (kbd "nl") 'avy-goto-line)
+  (define-key evil-normal-state-map (kbd "ny") 'avy-kill-ring-save-region)
+  (define-key evil-normal-state-map (kbd "god") 'p-add-single-quote)
+  (define-key evil-normal-state-map (kbd "gos") 'p-add-double-quote)
+
+  (define-key evil-visual-state-map (kbd "god") 'p-add-single-quote)
+  (define-key evil-visual-state-map (kbd "gos") 'p-add-double-quote)
 
   (general-create-definer p-comma-leader-def
     :prefix ","

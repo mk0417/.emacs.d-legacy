@@ -17,6 +17,10 @@
 (setq popper-reference-buffers
       '("\\*Messages\\*"
         "Output\\*$"
+        "\\*Warnings\\*$"
+        "\\*Backtrace\\*$"
+        "\\*Shell Command Output\\*$"
+        "\\*Compile-Log\\*$"
         "\\*Async Shell Command\\*"
         "^\\*jupyter-"
         help-mode

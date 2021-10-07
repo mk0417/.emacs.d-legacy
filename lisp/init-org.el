@@ -77,17 +77,22 @@
       org-tree-slide-activate-message (propertize "Presentation mode ON" 'face 'success)
       org-tree-slide-deactivate-message (propertize "Presentation mode OFF" 'face 'success))
 
-(setq olivetti-body-width 0.7
-      olivetti-minimum-body-width 80
+(setq olivetti-body-width 0.5
+      olivetti-minimum-body-width 70
       olivetti-recall-visual-line-mode-entry-state t)
+
+(autoload 'olivetti-set-width "olivetti")
 
 (add-hook 'org-tree-slide-play-hook (lambda ()
                                       (fringe-mode '(0 . 0))
-                                      (text-scale-increase 3)
-                                      (olivetti-mode 1)))
+                                      (text-scale-increase 4)
+                                      (olivetti-set-width 0.1)
+                                      (olivetti-mode 1)
+                                      (p-header-line-off)))
 (add-hook 'org-tree-slide-stop-hook (lambda ()
                                       (text-scale-adjust 0)
-                                      (olivetti-mode -1)))
+                                      (olivetti-mode -1)
+                                      (p-header-line-init)))
 
 (with-eval-after-load 'olivetti
   (dolist (m '(org-indent-mode visual-line-mode olivetti-mode text-scale-mode))
@@ -216,22 +221,21 @@
     :prefix "SPC"
     :states '(normal visual))
   (p-space-leader-def
-    "n"   '(:ignore t :which-key "note")
-    "na"  '(org-agenda :which-key "org agenda")
-    "nc"  '(org-capture :which-key "org capture")
-    "nj"  '(org-journal-new-entry :which-key "new journal"))
+    "n"  '(:ignore t :which-key "note")
+    "na" '(org-agenda :which-key "org agenda")
+    "nc" '(org-capture :which-key "org capture")
+    "nj" '(org-journal-new-entry :which-key "new journal"))
 
   (general-create-definer p-org-leader-def
     :prefix ";"
     :states '(normal visual)
     :keymaps 'org-mode-map)
   (p-org-leader-def
-    "."  '(org-toggle-narrow-to-subtree :which-key "narrow to substree")
-    ";"  '(org-toggle-latex-fragment :which-key "latex preview")
-    "j"  '(:ignore t :which-key "presentation")
-    "jj" '(org-tree-slide-mode :which-key "presentation on")
-    "jn" '(org-tree-slide-move-next-tree :which-key "next slide")
-    "jp" '(org-tree-slide-move-previous-tree :which-key "previous slide")
+    "." '(org-toggle-narrow-to-subtree :which-key "narrow to substree")
+    "," '(org-toggle-latex-fragment :which-key "latex preview")
+    "p" '(org-tree-slide-mode :which-key "presentation on")
+    "j" '(org-tree-slide-move-next-tree :which-key "next slide")
+    "k" '(org-tree-slide-move-previous-tree :which-key "previous slide")
     "t"  '(:ignore t :which-key "table")
     "tk" '(org-table-move-row-up :which-key "move row up")
     "tj" '(org-table-move-row-down :which-key "move row down")

@@ -184,7 +184,7 @@
     "sy" '(p-youtube-search :which-key "search on youtube")
     "t"  '(:ignore t :which-key "toggle")
     "tr" '(p-reveal-file-in-finder :which-key "reveal file in finder")
-    "tf" '(p-display-file-name :which-key "show file name")
+    "tn" '(p-display-file-name :which-key "show file name")
     "p"  '(:ignore t :which-key "projects and packages")
     "pS" '(p-list-installed-packages :which-key "list installed packages"))
 

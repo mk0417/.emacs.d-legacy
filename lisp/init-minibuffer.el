@@ -117,6 +117,31 @@
 (global-set-key (kbd "C-,") 'embark-act)
 (global-set-key (kbd "C-c C-o") 'embark-export)
 
+;; highlight folder to distinguish folder and file
+(defun +completion-category-highlight-files (cand)
+  (let ((len (length cand)))
+    (when (and (> len 0)
+               (eq (aref cand (1- len)) ?/))
+      (add-face-text-property 0 len 'font-lock-function-name-face 'append cand)))
+  cand)
+
+(defvar +completion-category-hl-func-overrides
+  `((file . ,#'+completion-category-highlight-files))
+  "Alist mapping category to highlight functions.")
+
+(advice-add #'vertico--arrange-candidates :around
+            (defun vertico-format-candidates+ (func metadata)
+              (let ((hl-func (or (alist-get (completion-metadata-get metadata 'category)
+                                            +completion-category-hl-func-overrides)
+                                 #'identity)))
+                (cl-letf* (((symbol-function 'actual-vertico-format-candidate)
+                            (symbol-function #'vertico--format-candidate))
+                           ((symbol-function #'vertico--format-candidate)
+                            (lambda (cand &rest args)
+                              (apply #'actual-vertico-format-candidate
+                                     (funcall hl-func cand) args))))
+                  (funcall func metadata)))))
+
 ;; colorize the current vertico candidate differently when acting
 (defun embark-vertico-indicator ()
   (let ((fr face-remapping-alist))
@@ -129,9 +154,13 @@
 
 ;; embark action integration with which-key
 (defun embark-which-key-indicator ()
+  "An embark indicator that displays keymaps using which-key.
+The which-key help message will show the type and value of the
+current target followed by an ellipsis if there are further
+targets."
   (lambda (&optional keymap targets prefix)
     (if (null keymap)
-        (kill-buffer which-key--buffer)
+        (which-key--hide-popup-ignore-command)
       (which-key--show-keymap
        (if (eq (caar targets) 'embark-become)
            "Become"
@@ -139,15 +168,24 @@
                  (plist-get (car targets) :type)
                  (embark--truncate-target (plist-get (car targets) :target))
                  (if (cdr targets) "…" "")))
-       (if prefix (lookup-key keymap prefix) keymap)
+       (if prefix
+           (pcase (lookup-key keymap prefix 'accept-default)
+             ((and (pred keymapp) km) km)
+             (_ (key-binding prefix 'accept-default)))
+         keymap)
        nil nil t))))
+
 
 (with-eval-after-load 'embark
   (setq embark-keymap-prompter-key ",")
   (setq embark-indicators '(embark-which-key-indicator embark-highlight-indicator embark-isearch-highlight-indicator))
   (add-to-list 'embark-indicators #'embark-vertico-indicator)
   (require 'embark-consult)
-  (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode))
+  (add-hook 'embark-collect-mode-hook 'embark-consult-preview-minor-mode)
+  (setq embark-indicators
+        '(embark-which-key-indicator
+          embark-highlight-indicator
+          embark-isearch-highlight-indicator)))
 
 ;; keystrokes feedback interval
 (setq echo-keystrokes 0.02)

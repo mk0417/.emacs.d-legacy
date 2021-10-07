@@ -12,6 +12,10 @@
 (menu-bar-mode -1)
 
 ;; header-line
+(defun p-header-line-off ()
+  (interactive)
+  (setq-default header-line-format nil))
+
 (defun p-header-line-init ()
   (interactive)
   (if (equal buffer-file-truename nil)

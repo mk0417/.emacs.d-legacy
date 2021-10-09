@@ -117,31 +117,6 @@
 (global-set-key (kbd "C-,") 'embark-act)
 (global-set-key (kbd "C-c C-o") 'embark-export)
 
-;; highlight folder to distinguish folder and file
-(defun +completion-category-highlight-files (cand)
-  (let ((len (length cand)))
-    (when (and (> len 0)
-               (eq (aref cand (1- len)) ?/))
-      (add-face-text-property 0 len 'font-lock-function-name-face 'append cand)))
-  cand)
-
-(defvar +completion-category-hl-func-overrides
-  `((file . ,#'+completion-category-highlight-files))
-  "Alist mapping category to highlight functions.")
-
-(advice-add #'vertico--arrange-candidates :around
-            (defun vertico-format-candidates+ (func metadata)
-              (let ((hl-func (or (alist-get (completion-metadata-get metadata 'category)
-                                            +completion-category-hl-func-overrides)
-                                 #'identity)))
-                (cl-letf* (((symbol-function 'actual-vertico-format-candidate)
-                            (symbol-function #'vertico--format-candidate))
-                           ((symbol-function #'vertico--format-candidate)
-                            (lambda (cand &rest args)
-                              (apply #'actual-vertico-format-candidate
-                                     (funcall hl-func cand) args))))
-                  (funcall func metadata)))))
-
 ;; colorize the current vertico candidate differently when acting
 (defun embark-vertico-indicator ()
   (let ((fr face-remapping-alist))

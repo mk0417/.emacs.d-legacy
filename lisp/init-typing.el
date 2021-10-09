@@ -7,7 +7,7 @@
 (setq key-chord-two-keys-delay 0.3)
 
 (with-eval-after-load 'evil
-  (dolist (m (list evil-insert-state-map evil-ex-completion-map minibuffer-mode-map))
+  (dolist (m (list evil-insert-state-map evil-ex-completion-map minibuffer-local-map))
     (key-chord-define m "kk" "()\C-b")
     (key-chord-define m ",," "[]\C-b")
     (key-chord-define m "hh" "{}\C-b")

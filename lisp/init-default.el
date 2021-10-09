@@ -1,5 +1,9 @@
 ;;; init-default.el --- Better default -*- lexical-binding: t -*-
 
+(straight-use-package 'diminish)
+(straight-use-package 'which-key)
+
+
 ;; initial scratch buffer message
 (setq initial-scratch-message
       (concat ";; Hello Peng, welcome to EMACS and happy hacking\n"
@@ -67,8 +71,11 @@
 
 ;; recentf-mode
 (add-hook 'after-init-hook 'recentf-mode)
+;;(setq-default recentf-max-saved-items 50
+;;              recentf-exclude `("/Applications/Emacs.app/Contents/Resources/lisp/" "/tmp/" "/ssh:" ,(concat package-user-dir "/.*-autoloads\\.el\\'")))
+
 (setq-default recentf-max-saved-items 50
-              recentf-exclude `("/Applications/Emacs.app/Contents/Resources/lisp/" "/tmp/" "/ssh:" ,(concat package-user-dir "/.*-autoloads\\.el\\'")))
+              recentf-exclude `("/Applications/Emacs.app/Contents/Resources/lisp/" "/tmp/" "/ssh:"))
 (add-to-list 'recentf-exclude (format "%s/\\.emacs\\.d/elpa.*/.*" (getenv "HOME")))
 
 ;; show-paren-mode
@@ -103,11 +110,7 @@
 (global-set-key (kbd "C-w") 'backward-kill-word)
 (global-set-key (kbd "C-c C-u") 'universal-argument)
 (global-set-key (kbd "C-c C-e") 'occur-edit-mode)
-(define-key minibuffer-mode-map (kbd "C-k") 'delete-backward-char)
-
-(straight-use-package 'diminish)
-
-(straight-use-package 'which-key)
+(define-key minibuffer-local-map (kbd "C-k") 'delete-backward-char)
 
 (add-hook 'after-init-hook 'which-key-mode)
 (setq-default which-key-idle-delay 0.8)

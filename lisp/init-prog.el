@@ -42,6 +42,7 @@
 
   ;; elpy
   (elpy-enable)
+  (diminish 'elpy-mode)
 
   ;; solve issue: send-region shows ^G
   ;; https://github.com/jorgenschaefer/elpy/issues/1550#issuecomment-478448647

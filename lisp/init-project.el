@@ -1,24 +1,8 @@
 ;;; init-project.el --- Project management -*- lexical-binding: t -*-
 
-(straight-use-package 'projectile)
 (straight-use-package 'rg)
 (straight-use-package 'citre)
 
-
-;; projectile
-(add-hook 'after-init-hook 'projectile-mode)
-
-;; project search path
-(setq projectile-project-search-path '("~/Git/"))
-
-;; shorter modeline
-(setq-default projectile-mode-line-prefix " Proj")
-
-(with-eval-after-load 'projectile
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-
-(when (executable-find "rg")
-  (setq-default projectile-generic-command "rg --files --hidden"))
 
 ;; citre
 (require 'citre-config)
@@ -38,10 +22,6 @@
 (with-eval-after-load 'citre
   (diminish 'citre-mode))
 
-(with-eval-after-load 'projectile
-  (setq citre-project-root-function #'projectile-project-root)
-  (setq projectile-mode-line-function '(lambda () (format " Proj[%s]" (projectile-project-name)))))
-
 
 ;; keybindings
 (with-eval-after-load 'evil
@@ -50,8 +30,8 @@
     :states '(normal visual))
   (p-space-leader-def
     "p"   '(:ignore t :which-key "projects and packages")
-    "pp"  '(projectile-switch-project :which-key "switch project")
-    "pf"  '(projectile-find-file :which-key "projectile find file")))
+    "pp"  '(project-switch-project :which-key "switch project")
+    "pf"  '(project-find-file :which-key "project find file")))
 
 (with-eval-after-load 'evil
   (general-create-definer p-comma-leader-def

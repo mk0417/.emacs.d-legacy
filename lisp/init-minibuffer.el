@@ -36,8 +36,6 @@
 
 ;; consult
 (with-eval-after-load 'consult
-  (setq-default consult-project-root-function 'projectile-project-root)
-
   (setq consult-narrow-key "<"
         consult-line-numbers-widen t
         consult-async-min-input 2

@@ -152,6 +152,7 @@
                          (read-string "Search YouTube: "))))))
 
 
+;; keybindings
 (with-eval-after-load 'evil
   (define-key evil-normal-state-map (kbd "C-i") 'p-delete-backward-to-tab)
   (define-key evil-normal-state-map (kbd "goe") 'p-surround-equal)

@@ -1,8 +1,5 @@
 ;;; init-xah.el --- Functions from Xah Lee -*- lexical-binding: t -*-
 
-(straight-use-package 'xah-replace-pairs)
-
-
 ;; new scratch buffer
 (defun xah-new-empty-buffer ()
   (interactive)
@@ -73,9 +70,9 @@
 
 ;; http://ergoemacs.org/emacs/emacs_navigating_keys_for_brackets.html
 (defvar xah-brackets nil "string of left/right brackets pairs.")
-(setq xah-brackets "()[]{}<>“”‘’‹›«»「」〈〉《》【】〔〕⦗⦘『』｢｣⟦⟧⟨⟩⟪⟫⟮⟯⟬⟭⌈⌉⌊⌋❨❩❪❫❴❵❬❭❮❯❰❱❲❳⸢⸣⸤⸥⸦⸧⸨⸩｟｠⸜⸝⸌⸍﹁﹂﹃﹄︹︺︻︼︗︘︿﹀︽︾﹇﹈︷︸")
-(defvar xah-left-brackets '("(" "{" "[" "<" "〔" "【" "〖" "〈" "《" "「" "『" "“" "‘" "‹" "«" ))
-(defvar xah-right-brackets '(")" "]" "}" ">" "〕" "】" "〗" "〉" "》" "」" "』" "”" "’" "›" "»"))
+(setq xah-brackets "()[]{}<>“”‘’‹›«»")
+(defvar xah-left-brackets '("(" "{" "[" "<" "‹" "«"))
+(defvar xah-right-brackets '(")" "}" "]" ">" "›" "»"))
 
 (progn
   (setq xah-left-brackets '())
@@ -100,52 +97,6 @@
 (defun xah-forward-right-bracket ()
   (interactive)
   (re-search-forward (regexp-opt xah-right-brackets) nil t))
-
-
-(autoload 'xah-replace-pairs-region "xah-replace-pairs")
-(autoload 'xah-replace-regexp-pairs-region "xah-replace-pairs")
-
-(defun xah-replace-paren-to-bracket (@begin @end)
-  (interactive
-   (if (use-region-p)
-       (list (region-beginning) (region-end))
-     (list (line-beginning-position) (line-end-position))))
-  (let ((case-fold-search nil))
-    (xah-replace-pairs-region @begin @end
-                              '(["(" "["]
-                                [")" "]"])
-                              'REPORT)))
-
-(defun xah-replace-bracket-to-paren (@begin @end)
-  (interactive
-   (if (use-region-p)
-       (list (region-beginning) (region-end))
-     (list (line-beginning-position) (line-end-position))))
-  (let ((case-fold-search nil))
-    (xah-replace-pairs-region @begin @end
-                              '(["[" "("]
-                                ["]" ")"])
-                              'REPORT)))
-
-(defun xah-replace-true-to-false (@begin @end)
-  (interactive
-   (if (use-region-p)
-       (list (region-beginning) (region-end))
-     (list (line-beginning-position) (line-end-position))))
-  (let ((case-fold-search nil))
-    (xah-replace-pairs-region @begin @end
-                              '(["True" "False"])
-                              'REPORT)))
-
-(defun xah-replace-false-to-true (@begin @end)
-  (interactive
-   (if (use-region-p)
-       (list (region-beginning) (region-end))
-     (list (line-beginning-position) (line-end-position))))
-  (let ((case-fold-search nil))
-    (xah-replace-pairs-region @begin @end
-                              '(["False" "True"])
-                              'REPORT)))
 
 (defun xah-beginning-of-line-or-block ()
   (interactive)
@@ -175,15 +126,9 @@
 (with-eval-after-load 'evil
   (define-key evil-normal-state-map (kbd "nf")  'xah-forward-right-bracket)
   (define-key evil-normal-state-map (kbd "nb")  'xah-backward-left-bracket)
-  (define-key evil-normal-state-map (kbd "nF")  'xah-replace-paren-to-bracket)
-  (define-key evil-normal-state-map (kbd "nP")  'xah-replace-bracket-to-paren)
-  (define-key evil-normal-state-map (kbd "nt")  'xah-replace-true-to-false)
-  (define-key evil-normal-state-map (kbd "nT")  'xah-replace-false-to-true)
   (define-key evil-normal-state-map (kbd "na")  'xah-beginning-of-line-or-block)
   (define-key evil-normal-state-map (kbd "ne")  'xah-end-of-line-or-block)
 
-  (define-key evil-visual-state-map (kbd "nF")  'xah-replace-paren-to-bracket)
-  (define-key evil-visual-state-map (kbd "nP")  'xah-replace-bracket-to-paren)
   (define-key evil-visual-state-map (kbd "na")  'xah-beginning-of-line-or-block)
   (define-key evil-visual-state-map (kbd "ne")  'xah-end-of-line-or-block)
 

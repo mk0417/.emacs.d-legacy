@@ -127,10 +127,6 @@
 
 ;; embark action integration with which-key
 (defun embark-which-key-indicator ()
-  "An embark indicator that displays keymaps using which-key.
-The which-key help message will show the type and value of the
-current target followed by an ellipsis if there are further
-targets."
   (lambda (&optional keymap targets prefix)
     (if (null keymap)
         (which-key--hide-popup-ignore-command)

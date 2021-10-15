@@ -25,7 +25,7 @@
 (add-hook 'buffer-list-update-hook 'p-header-line-init)
 
 ;; font
-(set-face-font 'default "Hack")
+(set-face-font 'default "Iosevka Comfy")
 
 ;; no fringe
 (fringe-mode '(0 . 0))

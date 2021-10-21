@@ -29,6 +29,9 @@
 (setq org-todo-keywords
       '((sequence "TODO(t)" "WORKING(w)" "|" "DONE(d)" "CANCEL(c)")))
 
+;; fix void function issue
+(autoload 'org-element-keyword-parser "org")
+
 (with-eval-after-load 'org
   (require 'org-tempo)
   (require 'ob)
@@ -208,6 +211,149 @@
                                   ("\\section{%s}" . "\\section*{%s}")
                                   ("\\subsection{%s}" . "\\subsection*{%s}")))
 
+;; https://github.com/mclear-tools/dotemacs/blob/master/setup-config/setup-teaching.el
+(setq org-latex-classes '(("beamer" "\\documentclass[presentation]{beamer}"
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+                          ("article" "\\documentclass[11pt]{article}"
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+                          ("report" "\\documentclass[11pt]{report}"
+                           ("\\part{%s}" . "\\part*{%s}")
+                           ("\\chapter{%s}" . "\\chapter*{%s}")
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+                          ("book" "\\documentclass[11pt]{book}"
+                           ("\\part{%s}" . "\\part*{%s}")
+                           ("\\chapter{%s}" . "\\chapter*{%s}")
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+                          ;; notes
+                          ("org-notes" "\\documentclass[12pt]{article}
+                           [NO-DEFAULT-PACKAGES]
+                           [EXTRA]
+                           \\input{/Users/roambot/.emacs.d/.local/custom-org-latex-classes/notes-setup-file.tex}"
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+                          ;; beamer handout
+                          ("beamer-handout" "\\documentclass[12pt]{article}
+                           [NO-DEFAULT-PACKAGES]
+                           [EXTRA]
+                           \\input{/Users/roambot/.emacs.d/.local/custom-org-latex-classes/handout-setup-file.tex}"
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+                          ;; beamer presentation
+                          ("beamer-presentation" "\\documentclass[presentation]{beamer}
+                           [NO-DEFAULT-PACKAGES]
+                           [PACKAGES]
+                           \\usepackage{pgfpages}
+                           [EXTRA]
+                           \\setbeameroption{show notes on second screen=right}
+                           \\setbeamertemplate{note page}{\\pagecolor{yellow!5}\\insertnote}
+                           \\input{/Users/roambot/.emacs.d/.local/custom-org-latex-classes/unl-beamer-preamble.tex}"
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+                          ;; beamer slides only
+                          ("beamer-slides-no-notes" "\\documentclass[handout]{beamer}
+                           [NO-DEFAULT-PACKAGES]
+                           [EXTRA]
+                           \\setbeameroption{hidenotes}
+                           \\input{/Users/roambot/.emacs.d/.local/custom-org-latex-classes/unl-beamer-preamble.tex}
+                           [PACKAGES]"
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+
+(defun cpm/org-export-beamer-presentation ()
+  (interactive)
+  (let ((org-export-exclude-tags '("handout")))
+    (save-excursion
+      (goto-char (point-min))
+      (org-beamer-export-to-pdf nil t nil nil '(:latex-class "beamer-presentation")))))
+
+;; https://kitchingroup.cheme.cmu.edu/blog/2013/12/08/Selectively-exporting-headlines-in-org-mode/
+(defun cpm/org-export--file-beamer-presentation ()
+  (interactive)
+  (let ((org-export-exclude-tags '("handout")))
+    (save-excursion
+      (goto-char (point-min))
+      (org-beamer-export-to-pdf t nil nil nil '(:latex-class "beamer-presentation")))))
+
+;;;; Org export to slides w/o notes
+(defun cpm/org-export-beamer-no-notes ()
+  "Export org subtree slide content to useful custom style handout (PDF) form"
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (org-open-file (org-beamer-export-to-pdf nil t nil nil '(:latex-class "beamer-slides-no-notes")))))
+
+(defun cpm/org-export--file-beamer-no-notes ()
+  "Export org file slide content to useful custom style handout (PDF) form"
+  (interactive)
+  (let ((org-export-exclude-tags '("slides")))
+    (save-excursion
+      (goto-char (point-min))
+      (org-beamer-export-to-pdf t nil nil nil '(:latex-class "beamer-slides-no-notes")))))
+
+;; Handouts
+(defun cpm/org-export-beamer-handout ()
+  "Export subtree content to PDF handout. Handout uses a distinctive quote style."
+  (interactive)
+  (let ((org-latex-default-quote-environment "quote-b")
+        (org-export-exclude-tags '("slides")))
+    (org-narrow-to-subtree)
+    (save-excursion
+      (goto-char (point-min))
+      (org-latex-export-to-pdf t t nil nil '(:latex-class "beamer-handout")))
+    (widen)))
+
+(defun cpm/org-export--file-beamer-handout ()
+  "Export file content to PDF handout. Handout uses a distinctive quote style."
+  (interactive)
+  (let ((org-latex-default-quote-environment "quote-b")
+        (org-export-exclude-tags '("slides")))
+    (save-excursion
+      (goto-char (point-min))
+      (org-latex-export-to-pdf t nil nil nil '(:latex-class "beamer-handout")))))
+
+;; Notes
+;; Org to PDF Notes
+(defun cpm/org-export-pdf-notes ()
+  "Export subtree of notes to PDF file. Note uses a distinctive quote style."
+  (interactive)
+  (let ((org-latex-default-quote-environment "quote-b"))
+    (org-narrow-to-subtree)
+    (save-excursion
+      (goto-char (point-min))
+      (org-latex-export-to-pdf t t nil nil '(:latex-class "org-notes")))
+    (widen)))
+
+(defun cpm/org-export--file-pdf-notes ()
+  "Export file notes to PDF file. Note uses a distinctive quote style."
+  (interactive)
+  (let ((org-latex-default-quote-environment "quote-b"))
+    (save-excursion
+      (goto-char (point-min))
+      (org-latex-export-to-pdf t nil nil nil '(:latex-class "org-notes")))))
+
+(defun cpm/cleanup-pdf-notes()
+  "Move notes to static directory & cleanup other files"
+  (interactive)
+  (async-shell-command-no-window "trash *.tex *.bbl && mv *.pdf static/materials/handouts"))
+
 
 ;; keybindings
 (global-set-key (kbd "C-c a") 'org-agenda)
@@ -233,9 +379,10 @@
   (p-org-leader-def
     "." '(org-toggle-narrow-to-subtree :which-key "narrow to substree")
     "," '(org-toggle-latex-fragment :which-key "latex preview")
-    "p" '(org-tree-slide-mode :which-key "presentation on")
-    "j" '(org-tree-slide-move-next-tree :which-key "next slide")
-    "k" '(org-tree-slide-move-previous-tree :which-key "previous slide")
+    ";" '(org-tree-slide-mode :which-key "presentation on")
+    "n" '(org-tree-slide-move-next-tree :which-key "next slide")
+    "p" '(org-tree-slide-move-previous-tree :which-key "previous slide")
+    "i" '(org-toggle-inline-images :which-key "toggle inline image")
     "t"  '(:ignore t :which-key "table")
     "tk" '(org-table-move-row-up :which-key "move row up")
     "tj" '(org-table-move-row-down :which-key "move row down")

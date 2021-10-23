@@ -19,11 +19,19 @@
 
 
 ;; mct
+(setq mct-remove-shadowed-file-names t)
+(setq mct-hide-completion-mode-line t)
+(setq mct-show-completion-line-numbers nil)
 (setq mct-apply-completion-stripes t)
+(setq mct-minimum-input 3)
+(setq mct-live-update-delay 0.6)
+(setq mct-completion-blocklist nil)
+(setq mct-completion-passlist
+      '(embark-prefix-help-command Info-goto-node Info-index Info-menu vc-retrieve-tag))
 
 (mct-mode 1)
-(minibuffer-depth-indicate-mode 1)
-(minibuffer-electric-default-mode 1)
+
+(define-key global-map (kbd "C-c ,") #'mct-focus-mini-or-completions)
 
 ;; vertico
 ;; (add-hook 'after-init-hook 'vertico-mode)

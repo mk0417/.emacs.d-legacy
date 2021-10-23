@@ -2,6 +2,7 @@
 
 (straight-use-package 'modus-themes)
 
+
 (setq modus-themes-bold-constructs t
       modus-themes-italic-constructs t
       modus-themes-links '(faint bold background)

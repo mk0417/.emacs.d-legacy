@@ -117,11 +117,6 @@
 (with-eval-after-load 'which-key
   (diminish 'which-key-mode))
 
-;; eldoc
-(when (fboundp 'global-eldoc-mode)
-  (add-hook 'after-init-hook 'global-eldoc-mode)
-  (diminish 'eldoc-mode))
-
 
 (provide 'init-default)
 ;;; init-default.el ends here

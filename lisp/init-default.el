@@ -117,6 +117,8 @@
 (with-eval-after-load 'which-key
   (diminish 'which-key-mode))
 
+(diminish 'eldoc-mode)
+
 
 (provide 'init-default)
 ;;; init-default.el ends here

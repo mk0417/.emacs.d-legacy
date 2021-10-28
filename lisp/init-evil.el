@@ -151,6 +151,7 @@
     "tp" '(variable-pitch-mode :which-key "pitch font mode")
     "tw" '(count-words :which-key "count words")
     "tl" '(count-lines-page :which-key "count lines")
+    "tm" '(toggle-frame-maximized :which-key "maximize window")
     "q"  '(:ignore t :which-key "quit")
     "qq" '(kill-emacs :which-key "quit emacs"))
 

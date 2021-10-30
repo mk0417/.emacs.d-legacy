@@ -90,12 +90,10 @@
                                       (fringe-mode '(0 . 0))
                                       (text-scale-increase 4)
                                       (olivetti-set-width 0.1)
-                                      (olivetti-mode 1)
-                                      (p-header-line-off)))
+                                      (olivetti-mode 1)))
 (add-hook 'org-tree-slide-stop-hook (lambda ()
                                       (text-scale-adjust 0)
-                                      (olivetti-mode -1)
-                                      (p-header-line-init)))
+                                      (olivetti-mode -1)))
 
 (with-eval-after-load 'olivetti
   (dolist (m '(org-indent-mode visual-line-mode olivetti-mode text-scale-mode))

@@ -12,17 +12,22 @@
 (menu-bar-mode -1)
 
 ;; header-line
-(defun p-header-line-off ()
-  (interactive)
-  (setq-default header-line-format nil))
+;; (defun p-header-line-off ()
+;;   (interactive)
+;;   (setq-default header-line-format nil))
 
-(defun p-header-line-init ()
-  (interactive)
-  (if (equal buffer-file-truename nil)
-      (setq-default header-line-format '("[%F]"))
-    (setq-default header-line-format (list "[%F]" '(:eval (format "  %s" buffer-file-truename))))))
+;; (defun p-header-line-init ()
+;;   (interactive)
+;;   (if (equal buffer-file-truename nil)
+;;       (setq-default header-line-format '("[%F]"))
+;;     (setq-default header-line-format (list "[%F]" '(:eval (format "  %s" buffer-file-truename))))))
 
-(add-hook 'buffer-list-update-hook 'p-header-line-init)
+;; (add-hook 'buffer-list-update-hook 'p-header-line-init)
+
+;; full path in mode-line
+(setq-default mode-line-buffer-identification
+              (list 'buffer-file-name
+                    '(:eval (format "  %s" buffer-file-truename))))
 
 ;; font
 (set-face-font 'default "Iosevka Comfy")

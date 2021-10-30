@@ -196,7 +196,7 @@ active region use it instead."
 
 ;; keybindings
 (with-eval-after-load 'evil
-  (define-key evil-normal-state-map (kbd "n,") 'avy-goto-char-2)
+  (define-key evil-normal-state-map (kbd "n,") 'avy-goto-char-timer)
   (define-key evil-normal-state-map (kbd "n2") 'avy-goto-char-2)
   (define-key evil-normal-state-map (kbd "nl") 'avy-goto-line)
   (define-key evil-normal-state-map (kbd "ny") 'avy-kill-ring-save-region))

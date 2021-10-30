@@ -50,6 +50,7 @@
 ;; (require 'init-tree-sitter)
 (require 'init-toki-editing)
 (require 'init-toki-blink)
+(require 'init-avy)
 
 
 (provide 'init)

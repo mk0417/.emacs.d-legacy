@@ -4,7 +4,6 @@
 (straight-use-package 'whitespace-cleanup-mode)
 (straight-use-package 'anzu)
 (straight-use-package 'smartparens)
-(straight-use-package 'avy)
 (straight-use-package 'htmlize)
 (straight-use-package 'elisp-demos)
 (straight-use-package '(color-rg
@@ -62,11 +61,6 @@
     (interactive)
     (sp-wrap-with-pair "{")))
 
-;; avy
-(setq avy-background t
-      avy-style 'post
-      avy-styles-alist '((avy-goto-line . pre)))
-
 ;; color-rg
 (autoload 'color-rg-search-input-in-current-file "color-rg")
 (autoload 'color-rg-search-symbol-in-current-file "color-rg")
@@ -91,9 +85,6 @@
 (global-set-key (kbd "C-c M-a") 'anzu-query-replace-at-cursor)
 
 (with-eval-after-load 'evil
-  (define-key evil-normal-state-map (kbd "nc") 'avy-goto-char-2)
-  (define-key evil-normal-state-map (kbd "nl") 'avy-goto-line)
-  (define-key evil-normal-state-map (kbd "ny") 'avy-kill-ring-save-region)
   (define-key evil-normal-state-map (kbd "god") 'p-add-single-quote)
   (define-key evil-normal-state-map (kbd "gos") 'p-add-double-quote)
 

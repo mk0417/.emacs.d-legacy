@@ -29,6 +29,9 @@
               (list 'buffer-file-name
                     '(:eval (format "  %s" buffer-file-truename))))
 
+;; maximize frame at startup
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
 ;; font
 (set-face-font 'default "Iosevka Comfy")
 

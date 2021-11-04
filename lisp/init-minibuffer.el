@@ -1,10 +1,10 @@
 ;;; init-minibuffer.el --- Config for minibuffer completion -*- lexical-binding: t; -*-
 
-(straight-use-package '(vertico
-                        :type git
-                        :host github
-                        :repo "minad/vertico"
-                        :files ("*.el" "extensions/*.el")))
+;; (straight-use-package '(vertico
+;;                         :type git
+;;                         :host github
+;;                         :repo "minad/vertico"
+;;                         :files ("*.el" "extensions/*.el")))
 (straight-use-package 'marginalia)
 (straight-use-package 'orderless)
 (straight-use-package 'consult)
@@ -12,27 +12,47 @@
 (straight-use-package 'embark-consult)
 (straight-use-package 'consult-dir)
 (straight-use-package 'fzf)
+(straight-use-package '(mct
+                        :type git
+                        :host gitlab
+                        :repo "protesilaos/mct"))
 
+
+(setq completions-detailed t)
+(setq read-buffer-completion-ignore-case t)
+(setq completion-cycle-threshold 2)
+
+(setq completion-styles '(basic substring initials flex partial-completion orderless))
+(setq completion-category-overrides '((file (styles . (basic partial-completion orderless)))))
+
+(minibuffer-electric-default-mode 1)
+(minibuffer-depth-indicate-mode 1)
+(file-name-shadow-mode 1)
+
+;; mct
+;; https://gitlab.com/protesilaos/mct
+(setq mct-remove-shadowed-file-names t)
+(setq mct-completion-blocklist nil)
+(setq mct-completion-passlist '(embark-prefix-help-command Info-goto-node Info-index Info-menu vc-retrieve-tag))
+
+(mct-mode 1)
 
 ;; vertico
-(add-hook 'after-init-hook 'vertico-mode)
+;; (add-hook 'after-init-hook 'vertico-mode)
 
 ;; add » to indicate current candidate
 ;; https://github.com/minad/vertico/wiki
-(advice-add #'vertico--format-candidate :around
-            (lambda (orig cand prefix suffix index _start)
-              (setq cand (funcall orig cand prefix suffix index _start))
-              (concat
-               (if (= vertico--index index)
-                   (propertize "» " 'face 'vertico-current)
-                 "  ")
-               cand)))
+;; (advice-add #'vertico--format-candidate :around
+;;             (lambda (orig cand prefix suffix index _start)
+;;               (setq cand (funcall orig cand prefix suffix index _start))
+;;               (concat
+;;                (if (= vertico--index index)
+;;                    (propertize "» " 'face 'vertico-current)
+;;                  "  ")
+;;                cand)))
 
 ;; marginalia
 (add-hook 'after-init-hook 'marginalia-mode)
-
-;; orderless
-(setq completion-styles '(substring orderless))
 
 ;; consult
 (with-eval-after-load 'consult
@@ -163,6 +183,7 @@
 ;; keybindings
 (global-set-key (kbd "C-c C-d") 'consult-dir)
 (global-set-key (kbd "C-c C-j") 'consult-dir-jump-file)
+(global-set-key (kbd "C-c ,") 'mct-focus-mini-or-completions)
 
 (with-eval-after-load 'evil
   (general-create-definer p-space-leader-def

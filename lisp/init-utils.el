@@ -27,8 +27,8 @@
 ;; find file in my config
 (defun p-find-file-in-config ()
   (interactive)
-  (cd "~/.emacs.d/")
-  (call-interactively 'find-file))
+  (let ((default-directory (file-truename (file-name-directory user-init-file))))
+    (call-interactively 'find-file)))
 
 ;; https://stackoverflow.com/questions/2951797/wrapping-selecting-text-in-enclosing-characters-in-emacs
 (defun p-surround-anything (s)

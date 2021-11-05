@@ -13,7 +13,7 @@
 (setq avy-keys '(?q ?e ?r ?y ?u ?o ?p
                     ?a ?s ?d ?f ?g ?h ?j
                     ?k ?l ?' ?x ?c ?v ?b
-                    ?n ?, ?/))
+                    ?n ?, ?.))
 
 (defun avy-show-dispatch-help ()
   (let* ((len (length "avy-action-"))
@@ -196,10 +196,13 @@ active region use it instead."
 
 ;; keybindings
 (with-eval-after-load 'evil
-  (define-key evil-normal-state-map (kbd "n,") 'avy-goto-char-timer)
-  (define-key evil-normal-state-map (kbd "n2") 'avy-goto-char-2)
-  (define-key evil-normal-state-map (kbd "nl") 'avy-goto-line)
-  (define-key evil-normal-state-map (kbd "ny") 'avy-kill-ring-save-region))
+  (define-key evil-normal-state-map (kbd "nv,") 'avy-goto-char-timer)
+  (define-key evil-normal-state-map (kbd "nv2") 'avy-goto-char-2)
+  (define-key evil-normal-state-map (kbd "nvl") 'avy-goto-line)
+  (define-key evil-normal-state-map (kbd "nvy") 'avy-kill-ring-save-region)
+  (define-key evil-normal-state-map (kbd "nvw") 'avy-goto-word-0)
+  (define-key evil-normal-state-map (kbd "nvp") 'avy-copy-region)
+  (define-key evil-normal-state-map (kbd "nvv") 'avy-copy-line))
 
 
 (provide 'init-avy)

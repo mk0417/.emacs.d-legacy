@@ -6,13 +6,15 @@
 (require 'avy)
 
 (setq avy-background nil
-      avy-style 'post
+      avy-style 'at
       avy-styles-alist '((avy-goto-line . post)))
+
+(setq avy-dispatch-alist nil)
 
 ;; https://karthinks.com/software/avy-can-do-anything/
 (setq avy-keys '(?q ?e ?r ?y ?u ?o ?p
                     ?a ?s ?d ?f ?g ?h ?j
-                    ?k ?l ?' ?x ?c ?v ?b
+                    ?l ?' ?x ?c ?v ?b
                     ?n ?, ?.))
 
 (defun avy-show-dispatch-help ()
@@ -58,7 +60,7 @@
 (defun avy-action-copy-whole-line (pt)
   (save-excursion
     (goto-char pt)
-    (cl- (start . end)
+    (cl-destructuring-bind (start . end)
         (bounds-of-thing-at-point 'line)
       (copy-region-as-kill start end)))
   (select-window
@@ -116,7 +118,7 @@
      (cdr (ring-ref avy-ring 0))))
   t)
 
-(setf (alist-get ?. avy-dispatch-alist) 'avy-action-embark)
+(setf (alist-get ?\; avy-dispatch-alist) 'avy-action-embark)
 
 ;; Avy + Isearch
 (define-key isearch-mode-map (kbd "M-j") 'avy-isearch)

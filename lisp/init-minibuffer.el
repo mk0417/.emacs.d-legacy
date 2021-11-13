@@ -18,9 +18,19 @@
                         :repo "protesilaos/mct"))
 
 
+;; https://protesilaos.com/emacs/dotemacs
 (setq completions-detailed t)
 (setq read-buffer-completion-ignore-case t)
 (setq completion-cycle-threshold 2)
+(setq completion-ignore-case t)
+
+(setq completions-group t)
+(setq completions-group-format
+      (concat
+       (propertize "    " 'face 'completions-group-separator)
+       (propertize " %s " 'face 'completions-group-title)
+       (propertize " " 'face 'completions-group-separator
+                   'display '(space :align-to right))))
 
 (setq completion-styles '(basic substring initials flex partial-completion orderless))
 (setq completion-category-overrides '((file (styles . (basic partial-completion orderless)))))
@@ -52,6 +62,7 @@
 ;;                cand)))
 
 ;; marginalia
+(setq marginalia-max-relative-age 0)
 (add-hook 'after-init-hook 'marginalia-mode)
 
 ;; consult
@@ -196,8 +207,8 @@
     "b"  '(:ignore t :which-key "buffer")
     "bb" '(consult-buffer :which-key "consult switch buffer")
     "bo" '(consult-buffer-other-window :which-key "open file in another window")
-    "e"  '(:ignore t :which-key "editing")
-    "er" '(vertico-repeat :which-key "vertico-repeat")
+    ;; "e"  '(:ignore t :which-key "editing")
+    ;; "er" '(vertico-repeat :which-key "vertico-repeat")
     "s"  '(:ignore t :which-key "search")
     "ss" '(consult-line :which-key "consult line")
     "sS" '(p-consult-at-point-line :which-key "consult at-point line")

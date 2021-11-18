@@ -19,36 +19,20 @@
         (header-date . (grayscale bold-today))
         (scheduled . rainbow)))
 
+(setq modus-themes-intense-markup t)
+
 (setq modus-themes-scale-headings t
       modus-themes-scale-4 1.3
       modus-themes-scale-3 1.2
       modus-themes-scale-2 1.1
       modus-themes-org-blocks 'gray-background)
 
-(setq modus-themes-headings '((t . line)))
+(setq modus-themes-headings '((t . (background overline bold))))
 
 (setq x-underline-at-descent-line t)
 
 (modus-themes-load-themes)
 (modus-themes-load-vivendi)
-
-;; header-line background
-(defun p-modus-header-line-bg ()
-  (interactive)
-  (let ((mytheme (symbol-name (car custom-enabled-themes))))
-    (when (equal mytheme "modus-vivendi")
-      (custom-set-faces
-       '(header-line ((t (:background "#2c2c2c"))))))
-    (when (equal mytheme "modus-operandi")
-      (custom-set-faces
-       '(header-line ((t (:background "#d5d5d5"))))))))
-
-(defvar after-load-theme-hook nil)
-(defadvice load-theme (after run-after-load-theme-hook activate)
-  (run-hooks 'after-load-theme-hook))
-
-(add-hook 'after-init-hook 'p-modus-header-line-bg)
-(add-hook 'after-load-theme-hook 'p-modus-header-line-bg)
 
 
 (provide 'init-theme)

@@ -5,6 +5,10 @@
 (straight-use-package 'org-tree-slide)
 (straight-use-package 'olivetti)
 (straight-use-package 'org-journal)
+(straight-use-package '(org-appear
+                        :type git
+                        :host github
+                        :repo "awth13/org-appear"))
 
 
 ;; org
@@ -67,6 +71,19 @@
       org-journal-file-format "%Y-%m-%d.org"
       org-journal-file-type 'monthly
       org-journal-enable-agenda-integration t)
+
+;; org appear
+;; https://github.com/willbchang/ward-emacs/blob/master/config.org#org-appear
+(setq org-appear-delay 0)
+(setq org-appear-autolinks t)
+(setq org-appear-autoentities t)
+(setq org-appear-autokeywords t)
+(setq org-appear-autosubmarkers t)
+
+(add-hook 'evil-insert-state-entry-hook (lambda() (setq org-appear-delay 0)))
+(add-hook 'evil-normal-state-entry-hook (lambda() (setq org-appear-delay 1)))
+
+(add-hook 'org-mode-hook 'org-appear-mode)
 
 ;; presentation (org-tree-slide + olivetti)
 (setq org-tree-slide-header nil

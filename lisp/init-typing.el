@@ -38,7 +38,6 @@
     (key-chord-define m ";r" "<-")
     (key-chord-define m ";j" "%>%")
     (key-chord-define m "nj" "|>")
-    (key-chord-define m "dj" "=>")
     (key-chord-define m ";f" "5")
     (key-chord-define m ";i" "6")
     (key-chord-define m ";s" "7")

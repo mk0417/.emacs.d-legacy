@@ -31,6 +31,7 @@
   (p-space-leader-def
     "p"   '(:ignore t :which-key "projects and packages")
     "pp"  '(project-switch-project :which-key "switch project")
+    "pb"  '(project-switch-to-buffer :which-key "switch buffer in project")
     "pf"  '(project-find-file :which-key "project find file")))
 
 (with-eval-after-load 'evil

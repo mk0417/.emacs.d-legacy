@@ -18,11 +18,49 @@
                         :repo "protesilaos/mct"))
 
 
+;; orderless
+(require 'prot-orderless)
+
+(setq prot-orderless-default-styles
+      '(orderless-prefixes
+        orderless-strict-leading-initialism
+        orderless-regexp))
+(setq prot-orderless-alternative-styles
+      '(orderless-literal
+        orderless-prefixes
+        orderless-strict-leading-initialism
+        orderless-regexp))
+
+(setq orderless-component-separator " +")
+(setq orderless-matching-styles prot-orderless-default-styles)
+(setq orderless-style-dispatchers
+      '(prot-orderless-literal-dispatcher
+        prot-orderless-initialism-dispatcher
+        prot-orderless-flex-dispatcher))
+;; SPC should never complete: use it for `orderless' groups.
+(let ((map minibuffer-local-completion-map))
+  (define-key map (kbd "SPC") nil)
+  (define-key map (kbd "?") nil))
+
+;; mct
+;; https://gitlab.com/protesilaos/mct
 ;; https://protesilaos.com/emacs/dotemacs
+(setq mct-remove-shadowed-file-names t)
+(setq mct-completion-blocklist nil)
+(setq mct-completion-passlist '(embark-prefix-help-command Info-goto-node Info-index Info-menu vc-retrieve-tag))
+
+(setq completion-styles '(basic substring initials flex partial-completion orderless))
+(setq completion-category-overrides '((file (styles . (basic partial-completion orderless)))))
+
+(setq completion-pcm-complete-word-inserts-delimiters nil)
+(setq completion-pcm-word-delimiters "-_./:| ")
+(setq completion-ignore-case t)
 (setq completions-detailed t)
 (setq read-buffer-completion-ignore-case t)
 (setq completion-cycle-threshold 2)
+(setq completion-flex-nospace nil)
 (setq completion-ignore-case t)
+(setq-default case-fold-search t)
 
 (setq completions-group t)
 (setq completions-group-format
@@ -32,18 +70,21 @@
        (propertize " " 'face 'completions-group-separator
                    'display '(space :align-to right))))
 
-(setq completion-styles '(basic substring initials flex partial-completion orderless))
-(setq completion-category-overrides '((file (styles . (basic partial-completion orderless)))))
+(setq read-buffer-completion-ignore-case t)
+(setq read-file-name-completion-ignore-case t)
+
+(setq enable-recursive-minibuffers t)
+(setq read-answer-short t)
+(setq resize-mini-windows t)
 
 (minibuffer-electric-default-mode 1)
 (minibuffer-depth-indicate-mode 1)
 (file-name-shadow-mode 1)
 
-;; mct
-;; https://gitlab.com/protesilaos/mct
-(setq mct-remove-shadowed-file-names t)
-(setq mct-completion-blocklist nil)
-(setq mct-completion-passlist '(embark-prefix-help-command Info-goto-node Info-index Info-menu vc-retrieve-tag))
+;; disable cursor movement in minibuffer
+(setq minibuffer-prompt-properties
+    '(read-only t cursor-intangible t face minibuffer-prompt))
+(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
 (mct-mode 1)
 
@@ -81,6 +122,9 @@
                                    (?p "Packages"  font-lock-constant-face)
                                    (?t "Types"     font-lock-type-face)
                                    (?v "Variables" font-lock-variable-name-face)))))
+
+  (setq consult-preview-key 'any)
+  (add-hook 'completion-list-mode-hook #'consult-preview-at-point-mode)
 
   (defmacro p-no-consult-preview (&rest cmds)
     `(with-eval-after-load 'consult
@@ -146,16 +190,6 @@
 (global-set-key (kbd "C-,") 'embark-act)
 (global-set-key (kbd "C-c C-o") 'embark-export)
 
-;; colorize the current vertico candidate differently when acting
-(defun embark-vertico-indicator ()
-  (let ((fr face-remapping-alist))
-    (lambda (&optional keymap _targets prefix)
-      (when (bound-and-true-p vertico--input)
-        (setq-local face-remapping-alist
-                    (if keymap
-                        (cons '(vertico-current . embark-target) fr)
-                      fr))))))
-
 ;; embark action integration with which-key
 (defun embark-which-key-indicator ()
   (lambda (&optional keymap targets prefix)
@@ -174,7 +208,6 @@
              (_ (key-binding prefix 'accept-default)))
          keymap)
        nil nil t))))
-
 
 (with-eval-after-load 'embark
   (setq embark-keymap-prompter-key ",")

@@ -29,6 +29,19 @@
                                  gud-mode
                                  vterm-mode))
 
+(setq dabbrev-abbrev-char-regexp "\\sw\\|\\s_")
+(setq dabbrev-abbrev-skip-leading-regexp "[$*/=~']")
+(setq dabbrev-backward-only nil)
+(setq dabbrev-case-distinction 'case-replace)
+(setq dabbrev-case-fold-search nil)
+(setq dabbrev-case-replace 'case-replace)
+(setq dabbrev-check-other-buffers t)
+(setq dabbrev-eliminate-newlines t)
+(setq dabbrev-upcase-means-case-search t)
+(let ((map global-map))
+  (define-key map (kbd "C-x a d") #'dabbrev-expand)
+  (define-key map (kbd "C-x a c") #'dabbrev-completion))
+
 ;; remove duplicate candidate.
 (with-eval-after-load 'company
   (add-to-list 'company-transformers #'delete-dups))

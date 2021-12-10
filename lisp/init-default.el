@@ -2,6 +2,7 @@
 
 (straight-use-package 'diminish)
 (straight-use-package 'which-key)
+(straight-use-package 'rainbow-delimiters)
 
 
 ;; initial scratch buffer message
@@ -49,11 +50,12 @@
               bookmark-default-file (expand-file-name ".bookmarks.el" user-emacs-directory)
               mouse-yank-at-point t
               tab-width 4
+              indent-tabs-mode nil
+              tab-always-indent 'complete
               case-fold-search t
               column-number-mode t
               ediff-split-window-function 'split-window-horizontally
               ediff-window-setup-function 'ediff-setup-windows-plain
-              indent-tabs-mode nil
               create-lockfiles nil
               auto-save-default nil
               make-backup-files nil
@@ -79,10 +81,14 @@
 (add-to-list 'recentf-exclude (format "%s/\\.emacs\\.d/elpa.*/.*" (getenv "HOME")))
 
 ;; show-paren-mode
+(setq show-paren-style 'parenthesis)
+(setq show-paren-when-point-in-periphery t)
+(setq show-paren-when-point-inside-paren t)
 (add-hook 'after-init-hook 'show-paren-mode)
 
 ;; rainbow-delimiters
-(straight-use-package 'rainbow-delimiters)
+(setq rainbow-ansi-colors nil)
+(setq rainbow-x-colors nil)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 ;; trash
@@ -118,11 +124,6 @@
   (diminish 'which-key-mode))
 
 (diminish 'eldoc-mode)
-
-;; disable cursor movement in minibuffer
-(setq minibuffer-prompt-properties
-    '(read-only t cursor-intangible t face minibuffer-prompt))
-(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
 
 (provide 'init-default)

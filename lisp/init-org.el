@@ -85,37 +85,6 @@
 
 (add-hook 'org-mode-hook 'org-appear-mode)
 
-;; presentation (org-tree-slide + olivetti)
-(setq org-tree-slide-header nil
-      org-tree-slide-slide-in-effect t
-      org-tree-slide-heading-emphasis nil
-      org-tree-slide-cursor-init t
-      org-tree-slide-modeline-display 'outside
-      org-tree-slide-skip-done nil
-      org-tree-slide-skip-comments t
-      org-tree-slide-skip-outline-level 5
-      org-tree-slide-activate-message (propertize "Presentation mode ON" 'face 'success)
-      org-tree-slide-deactivate-message (propertize "Presentation mode OFF" 'face 'success))
-
-(setq olivetti-body-width 0.5
-      olivetti-minimum-body-width 70
-      olivetti-recall-visual-line-mode-entry-state t)
-
-(autoload 'olivetti-set-width "olivetti")
-
-(add-hook 'org-tree-slide-play-hook (lambda ()
-                                      (fringe-mode '(0 . 0))
-                                      (text-scale-increase 4)
-                                      (olivetti-set-width 0.1)
-                                      (olivetti-mode 1)))
-(add-hook 'org-tree-slide-stop-hook (lambda ()
-                                      (text-scale-adjust 0)
-                                      (olivetti-mode -1)))
-
-(with-eval-after-load 'olivetti
-  (dolist (m '(org-indent-mode visual-line-mode olivetti-mode text-scale-mode))
-    (diminish m)))
-
 ;; capturing
 (setq org-capture-templates
       `(("t" "todo" entry (file ,(concat org-directory "/todo.org"))
@@ -369,6 +338,46 @@
   (interactive)
   (async-shell-command-no-window "trash *.tex *.bbl && mv *.pdf static/materials/handouts"))
 
+;; focus mode and presentation mode
+(setq olivetti-body-width 0.7)
+(setq olivetti-minimum-body-width 80)
+(setq olivetti-recall-visual-line-mode-entry-state t)
+
+(setq org-tree-slide-breadcrumbs nil)
+(setq org-tree-slide-header nil)
+(setq org-tree-slide-slide-in-effect nil)
+(setq org-tree-slide-heading-emphasis nil)
+(setq org-tree-slide-cursor-init t)
+(setq org-tree-slide-modeline-display nil)
+(setq org-tree-slide-skip-done nil)
+(setq org-tree-slide-skip-comments t)
+(setq org-tree-slide-fold-subtrees-skipped t)
+(setq org-tree-slide-skip-outline-level 8)
+(setq org-tree-slide-never-touch-face t)
+(setq org-tree-slide-activate-message
+      (format "Presentation %s" (propertize "ON" 'face 'success)))
+(setq org-tree-slide-deactivate-message
+      (format "Presentation %s" (propertize "OFF" 'face 'error)))
+
+(setq prot-logos-org-presentation nil)
+(setq prot-logos-variable-pitch nil)
+(setq prot-logos-scroll-lock nil)
+(setq prot-logos-hidden-modeline t)
+
+(with-eval-after-load 'olivetti
+  (dolist (m '(org-indent-mode visual-line-mode olivetti-mode text-scale-mode))
+    (diminish m)))
+
+(add-hook 'org-tree-slide-play-hook (lambda ()
+                                      (text-scale-increase 4)
+                                      (olivetti-set-width 0.1)
+                                      (olivetti-mode 1)))
+(add-hook 'org-tree-slide-stop-hook (lambda ()
+                                      (text-scale-adjust 0)
+                                      (olivetti-mode -1)))
+
+(autoload 'prot-logos-focus-mode "prot-logos")
+
 
 ;; keybindings
 (global-set-key (kbd "C-c a") 'org-agenda)
@@ -380,24 +389,25 @@
 (with-eval-after-load 'evil
   (general-create-definer p-space-leader-def
     :prefix "SPC"
-    :states '(normal visual))
+    :states '(normal))
   (p-space-leader-def
     "n"  '(:ignore t :which-key "note")
     "na" '(org-agenda :which-key "org agenda")
     "nc" '(org-capture :which-key "org capture")
     "nj" '(org-journal-new-entry :which-key "new journal"))
-
   (general-create-definer p-org-leader-def
     :prefix ";"
-    :states '(normal visual)
+    :states '(normal)
     :keymaps 'org-mode-map)
   (p-org-leader-def
     "." '(org-toggle-narrow-to-subtree :which-key "narrow to substree")
     "," '(org-toggle-latex-fragment :which-key "latex preview")
-    ";" '(org-tree-slide-mode :which-key "presentation on")
+    "i" '(org-toggle-inline-images :which-key "toggle inline image")
+    "f" '(prot-logos-focus-mode :which-key "focus mode")
+    ";" '(org-tree-slide-mode :which-key "presentation mode")
     "n" '(org-tree-slide-move-next-tree :which-key "next slide")
     "p" '(org-tree-slide-move-previous-tree :which-key "previous slide")
-    "i" '(org-toggle-inline-images :which-key "toggle inline image")
+    "h" '(org-tree-slide-display-header-toggle :which-key "toggle slide header")
     "t"  '(:ignore t :which-key "table")
     "tk" '(org-table-move-row-up :which-key "move row up")
     "tj" '(org-table-move-row-down :which-key "move row down")

@@ -7,7 +7,8 @@
       modus-themes-italic-constructs t
       modus-themes-links '(faint bold background)
       modus-themes-prompts '(bold background)
-      modus-themes-mode-line '(moody)
+      ;; modus-themes-mode-line '(moody)
+      modus-themes-mode-line '(borderless)
       modus-themes-completions 'opinionated
       modus-themes-fringes 'intense
       modus-themes-hl-line 'intense

@@ -147,7 +147,8 @@
     "pr" '(straight-remove-unused-repos  :which-key "straight-remove-unused-repos")
     "pu" '(straight-pull-all  :which-key "straight update all packages")
     "t"  '(:ignore t :which-key "toggle")
-    "tf" '(toggle-frame-fullscreen :which-key "fullscreen")
+    "tf" '(prot-fonts-set-fonts :which-key "set font")
+    "tF" '(toggle-frame-fullscreen :which-key "fullscreen")
     "tp" '(variable-pitch-mode :which-key "pitch font mode")
     "tw" '(count-words :which-key "count words")
     "tl" '(count-lines-page :which-key "count lines")
@@ -161,7 +162,12 @@
   (p-comma-leader-def
     "i" '(evilmi-select-items :which-key "select item")
     "a" '(beginning-of-defun :which-key "beginning of function")
-    "e" '(end-of-defun :which-key "end of function")))
+    "e" '(end-of-defun :which-key "end of function")
+    "t"  '(:ignore t :which-key "text")
+    "ts" '((lambda () (interactive) (prot-fonts-set-fonts 'small)) :which-key "set small font")
+    "tr" '((lambda () (interactive) (prot-fonts-set-fonts 'regular)) :which-key "set regular font")
+    "tl" '((lambda () (interactive) (prot-fonts-set-fonts 'large)) :which-key "set large font")
+    "tL" '((lambda () (interactive) (prot-fonts-set-fonts 'large-alt)) :which-key "set large-alt font")))
 
 
 (provide 'init-evil)

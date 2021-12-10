@@ -1,4 +1,35 @@
 ;;; init-prot.el --- Protesilaos Stavrou -*- lexical-binding: t -*-
+;; https://protesilaos.com/emacs/dotemacs
+
+(setq display-time-format "%a %e %b, %H:%M")
+;; (setq display-time-24hr-format t)
+;; (setq display-time-day-and-date t)
+(setq display-time-interval 60)
+(setq display-time-default-load-average nil)
+
+;;; World clock
+(setq zoneinfo-style-world-list
+      '(("America/Los_Angeles" "Los Angeles")
+        ("America/Chicago" "Chicago")
+        ("Brazil/Acre" "Rio Branco")
+        ("America/New_York" "New York")
+        ("Brazil/East" "Brasília")
+        ("Europe/London" "London")
+        ("Europe/Lisbon" "Lisbon")
+        ("Europe/Brussels" "Brussels")
+        ("Europe/Athens" "Athens")
+        ("Asia/Tehran" "Tehran")
+        ("Asia/Tbilisi" "Tbilisi")
+        ("Asia/Yekaterinburg" "Yekaterinburg")
+        ("Asia/Shanghai" "Shanghai")
+        ("Asia/Tokyo" "Tokyo")
+        ("Asia/Vladivostok" "Vladivostok")))
+
+(setq world-clock-list t)
+(setq world-clock-time-format "%R %z  %A %d %B")
+(setq world-clock-buffer-name "*world-clock*") ; Placement handled by `display-buffer-alist'
+(setq world-clock-timer-enable t)
+(setq world-clock-timer-second 60)
 
 ;; prot-comment-timestamp-keyword
 (defvar prot-common--line-regexp-alist

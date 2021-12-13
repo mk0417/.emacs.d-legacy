@@ -9,8 +9,7 @@
   (tool-bar-mode -1))
 (when (fboundp 'set-scroll-bar-mode)
   (set-scroll-bar-mode nil))
-;; enable menu bar otherwise yabai cannot caputre Emacs
-;; (menu-bar-mode -1)
+(menu-bar-mode -1)
 
 ;; header-line
 ;; (defun p-header-line-off ()

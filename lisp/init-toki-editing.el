@@ -230,13 +230,19 @@ with the line before/after it."
      (t
       (delete-region beg end)))))
 
+(defun p-puni-kill-line-and-insert ()
+    (interactive)
+    (puni-kill-line)
+    (evil-insert 0))
+
+
 ;; overwrite puni default keybindings
 (define-key puni-mode-map (kbd "C-k") nil)
 (define-key puni-mode-map (kbd "C-w") nil)
 
 (with-eval-after-load 'evil
-  (define-key evil-normal-state-map (kbd "nn") 'toki-smooth-scroll-half-page-up)
-  (define-key evil-normal-state-map (kbd "np") 'toki-smooth-scroll-half-page-down)
+  (define-key evil-normal-state-map (kbd "nj") 'toki-smooth-scroll-half-page-up)
+  (define-key evil-normal-state-map (kbd "nk") 'toki-smooth-scroll-half-page-down)
   (define-key evil-normal-state-map (kbd "noa") 'toki-beginning-of-line)
   (define-key evil-normal-state-map (kbd "noe") 'toki-end-of-line)
   (define-key evil-normal-state-map (kbd "now") 'toki-forward-subsentence)
@@ -244,6 +250,7 @@ with the line before/after it."
   (define-key evil-normal-state-map (kbd "nol") 'toki-forward-delete-word)
   (define-key evil-normal-state-map (kbd "noh") 'toki-backward-delete-word)
   (define-key evil-normal-state-map (kbd "noc") 'puni-kill-line)
+  (define-key evil-normal-state-map (kbd "noi") 'p-puni-kill-line-and-insert)
   (define-key evil-normal-state-map (kbd "nok") 'puni-beginning-of-sexp)
   (define-key evil-normal-state-map (kbd "noj") 'puni-end-of-sexp)
   (define-key evil-normal-state-map (kbd "noo") 'puni-expand-region)
@@ -257,6 +264,8 @@ with the line before/after it."
   (define-key evil-normal-state-map (kbd "no;") 'puni-mark-list-around-point)
 
   (define-key evil-visual-state-map (kbd "noo") 'puni-expand-region)
+  (define-key evil-visual-state-map (kbd "nou") 'puni-forward-sexp)
+  (define-key evil-visual-state-map (kbd "not") 'puni-backward-sexp)
 
   (general-create-definer p-comma-leader-def
     :prefix ","

@@ -60,6 +60,10 @@
 
 
 ;; R
+;; https://github.com/emacs-ess/ESS/issues/955
+(setq ess-r-company-backends
+      '((company-tabnine company-R-library company-R-args company-R-objects :separate)))
+
 (with-eval-after-load 'ess
   ;; disable flymake
   (add-hook 'ess-r-mode-hook (lambda () (flymake-mode -1)))

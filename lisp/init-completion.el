@@ -2,6 +2,7 @@
 
 (straight-use-package 'company)
 (straight-use-package 'company-statistics)
+(straight-use-package 'company-tabnine)
 
 
 ;; company
@@ -52,6 +53,9 @@
 
 (with-eval-after-load 'company
   (company-statistics-mode)
+
+  ;; tabnine
+  (add-to-list 'company-backends #'company-tabnine)
 
   (custom-set-faces
    '(company-preview-common

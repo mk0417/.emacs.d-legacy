@@ -190,7 +190,7 @@ before entering minibuffer."
 (global-set-key (kbd "C-x o") 'switch-window)
 
 (with-eval-after-load 'evil
-  (define-key evil-normal-state-map (kbd "nr") 'toki-recenter)
+  (define-key evil-normal-state-map (kbd "got") 'toki-recenter)
 
   (general-create-definer p-space-leader-def
     :prefix "SPC"

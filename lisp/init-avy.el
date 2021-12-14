@@ -7,7 +7,7 @@
 
 (setq avy-background nil
       avy-style 'at
-      avy-styles-alist '((avy-goto-line . post)))
+      avy-styles-alist '((avy-goto-line . pre)))
 
 (setq avy-dispatch-alist nil)
 
@@ -198,13 +198,13 @@ active region use it instead."
 
 ;; keybindings
 (with-eval-after-load 'evil
-  (define-key evil-normal-state-map (kbd "nv,") 'avy-goto-char-timer)
-  (define-key evil-normal-state-map (kbd "nv2") 'avy-goto-char-2)
-  (define-key evil-normal-state-map (kbd "nvl") 'avy-goto-line)
-  (define-key evil-normal-state-map (kbd "nvy") 'avy-kill-ring-save-region)
-  (define-key evil-normal-state-map (kbd "nvw") 'avy-goto-word-0)
-  (define-key evil-normal-state-map (kbd "nvp") 'avy-copy-region)
-  (define-key evil-normal-state-map (kbd "nvv") 'avy-copy-line))
+  (define-key evil-normal-state-map (kbd ",v,") 'avy-goto-char-timer)
+  (define-key evil-normal-state-map (kbd ",v2") 'avy-goto-char-2)
+  (define-key evil-normal-state-map (kbd ",vl") 'avy-goto-line)
+  (define-key evil-normal-state-map (kbd ",vy") 'avy-kill-ring-save-region)
+  (define-key evil-normal-state-map (kbd ",vw") 'avy-goto-word-0)
+  (define-key evil-normal-state-map (kbd ",vp") 'avy-copy-region)
+  (define-key evil-normal-state-map (kbd ",vv") 'avy-copy-line))
 
 
 (provide 'init-avy)

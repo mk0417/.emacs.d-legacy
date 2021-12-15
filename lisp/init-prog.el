@@ -31,7 +31,6 @@
     (setq beg (region-beginning) end (region-end))
     (jupyter-eval-region beg end)))
 
-
 ;; Python
 (with-eval-after-load 'python
   (setq python-indent-guess-indent-offset-verbose nil
@@ -60,10 +59,6 @@
 
 
 ;; R
-;; https://github.com/emacs-ess/ESS/issues/955
-(setq ess-r-company-backends
-      '((company-tabnine company-R-library company-R-args company-R-objects :separate)))
-
 (with-eval-after-load 'ess
   ;; disable flymake
   (add-hook 'ess-r-mode-hook (lambda () (flymake-mode -1)))
@@ -72,7 +67,6 @@
   ;; fix: Error running timer 'ess--idle-timer-function': (wrong-type-argument stringp nil)
   ;; https://github.com/emacs-ess/ESS/issues/1102
   (setq ess-can-eval-in-background nil))
-
 
 ;; Stata
 ;; https://github.com/hieutkt/.doom.d/blob/master/config.el

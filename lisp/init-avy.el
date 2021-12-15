@@ -5,9 +5,16 @@
 
 (require 'avy)
 
-(setq avy-background nil
+(setq avy-background t
       avy-style 'at
       avy-styles-alist '((avy-goto-line . pre)))
+
+(setq avy-lead-faces
+      '(avy-lead-face
+        avy-lead-face-1
+        avy-lead-face-1
+        avy-lead-face-1
+        avy-lead-face-1))
 
 (setq avy-dispatch-alist nil)
 

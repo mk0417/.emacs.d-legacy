@@ -2,7 +2,6 @@
 
 (straight-use-package 'company)
 (straight-use-package 'company-statistics)
-(straight-use-package 'company-tabnine)
 
 
 ;; company

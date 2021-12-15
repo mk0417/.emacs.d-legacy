@@ -22,7 +22,10 @@ Version: 2019-12-26 2021-04-04 2021-08-13"
       (when (re-search-backward "\n[ \t]*\n" nil 1)
         (goto-char (match-end 0)))
       (push-mark (point) t t)
-      (re-search-forward "\n[ \t]*\n" nil 1))))
+      (re-search-forward "\n[ \t]*\n" nil 1)
+      ;; my-hack
+      (previous-line)
+      (end-of-line))))
 
 ;; open using external app in dired
 ;; http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html

@@ -521,10 +521,10 @@ Version: 2020-11-24 2021-07-11"
 
 ;; keybindings
 (with-eval-after-load 'evil
+  (define-key evil-normal-state-map (kbd ";a") 'xah-beginning-of-line-or-block)
+  (define-key evil-normal-state-map (kbd ";e") 'xah-end-of-line-or-block)
   (define-key evil-normal-state-map (kbd ",nf") 'xah-forward-right-bracket)
   (define-key evil-normal-state-map (kbd ",nb") 'xah-backward-left-bracket)
-  (define-key evil-normal-state-map (kbd ",na") 'xah-beginning-of-line-or-block)
-  (define-key evil-normal-state-map (kbd ",ne") 'xah-end-of-line-or-block)
   (define-key evil-normal-state-map (kbd ",nm") 'xah-goto-matching-bracket)
   (define-key evil-normal-state-map (kbd ",nc") 'xah-toggle-letter-case)
   (define-key evil-normal-state-map (kbd ",nn") 'xah-space-to-newline)
@@ -535,8 +535,8 @@ Version: 2020-11-24 2021-07-11"
   (define-key evil-normal-state-map (kbd ",ns") 'xah-extend-selection)
   (define-key evil-normal-state-map (kbd ",ni") 'xah-select-text-in-quote)
 
-  (define-key evil-visual-state-map (kbd ",na") 'xah-beginning-of-line-or-block)
-  (define-key evil-visual-state-map (kbd ",ne") 'xah-end-of-line-or-block)
+  (define-key evil-visual-state-map (kbd ";a") 'xah-beginning-of-line-or-block)
+  (define-key evil-visual-state-map (kbd ";e") 'xah-end-of-line-or-block)
   (define-key evil-visual-state-map (kbd ",nc") 'xah-toggle-letter-case)
   (define-key evil-visual-state-map (kbd ",nh") 'xah-cycle-hyphen-lowline-space)
   (define-key evil-visual-state-map (kbd ",ns") 'xah-extend-selection)

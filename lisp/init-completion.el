@@ -65,9 +65,9 @@
    '(company-tooltip-common
      ((t (:background "#ffeead" :foreground "black")))))
 
-  (define-key company-mode-map   (kbd "C-j") 'company-complete)
-  (define-key company-mode-map   [remap completion-at-point] 'company-complete)
-  (define-key company-mode-map   [remap indent-for-tab-command] 'company-indent-or-complete-common)
+  (define-key company-mode-map (kbd "C-j") 'company-complete)
+  (define-key company-mode-map [remap completion-at-point] 'company-complete)
+  (define-key company-mode-map [remap indent-for-tab-command] 'company-indent-or-complete-common)
   (define-key company-active-map (kbd "C-m") 'company-complete-selection)
   (define-key company-active-map (kbd "C-w") 'backward-kill-word)
   (define-key company-active-map (kbd "C-k") 'delete-backward-char)

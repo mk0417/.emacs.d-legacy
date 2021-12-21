@@ -28,7 +28,6 @@
     (key-chord-define m "xy" "<")
     (key-chord-define m "dy" ">")
     (key-chord-define m "jk" "<>\C-b")
-    (key-chord-define m ",s" "---")
     (key-chord-define m "ww" "?")
     (key-chord-define m "jh" "#")
     (key-chord-define m ",a" "--")

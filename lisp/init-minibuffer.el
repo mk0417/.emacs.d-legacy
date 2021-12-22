@@ -47,6 +47,7 @@
 ;; https://protesilaos.com/emacs/dotemacs
 (setq mct-remove-shadowed-file-names t)
 (setq mct-completion-blocklist nil)
+(setq mct-live-update-delay 0.6)
 (setq mct-completion-passlist '(embark-prefix-help-command Info-goto-node Info-index Info-menu vc-retrieve-tag))
 
 (setq completion-styles '(basic substring initials flex partial-completion orderless))

@@ -19,10 +19,7 @@
 (setq avy-dispatch-alist nil)
 
 ;; https://karthinks.com/software/avy-can-do-anything/
-(setq avy-keys '(?q ?e ?r ?y ?u ?o ?p
-                    ?a ?s ?d ?f ?g ?h ?j
-                    ?l ?' ?x ?c ?v ?b
-                    ?n ?, ?.))
+(setq avy-keys '(?q ?e ?r ?y ?u ?o ?p ?a ?s ?d ?f ?g ?h ?j ?l ?x ?c ?v ?b ?n))
 
 (defun avy-show-dispatch-help ()
   (let* ((len (length "avy-action-"))
@@ -206,6 +203,7 @@ active region use it instead."
 ;; keybindings
 (with-eval-after-load 'evil
   (define-key evil-normal-state-map (kbd ",v,") 'avy-goto-char-timer)
+  (define-key evil-normal-state-map (kbd "f") 'avy-goto-word-0)
   (define-key evil-normal-state-map (kbd ",v2") 'avy-goto-char-2)
   (define-key evil-normal-state-map (kbd ",vl") 'avy-goto-line)
   (define-key evil-normal-state-map (kbd ",vy") 'avy-kill-ring-save-region)

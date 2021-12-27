@@ -8,6 +8,7 @@
                         :repo "emacs-ess/ess-stata-mode"))
 (straight-use-package 'ein)
 (straight-use-package 'eglot)
+(straight-use-package 'dumb-jump)
 
 
 ;; Jupyter
@@ -104,6 +105,18 @@
           (lambda ()
             (setq-local eglot-stay-out-of '(flymake))
             (add-hook 'flymake-diagnostic-functions 'eglot-flymake-backend nil t)))
+
+
+;; dumb-jump
+(setq dumb-jump-prefer-searcher 'rg)
+(setq xref-show-definitions-function #'xref-show-definitions-completing-read)
+
+(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+
+(with-eval-after-load 'evil
+  (define-key evil-normal-state-map (kbd "g.") 'dumb-jump-quick-look)
+  (define-key evil-normal-state-map (kbd "gt") 'dumb-jump-go)
+  (define-key evil-normal-state-map (kbd "gb") 'dumb-jump-back))
 
 
 (provide 'init-prog)

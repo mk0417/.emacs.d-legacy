@@ -202,14 +202,13 @@ active region use it instead."
 
 ;; keybindings
 (with-eval-after-load 'evil
-  (define-key evil-normal-state-map (kbd ",v,") 'avy-goto-char-timer)
-  (define-key evil-normal-state-map (kbd "f") 'avy-goto-word-0)
-  (define-key evil-normal-state-map (kbd ",v2") 'avy-goto-char-2)
-  (define-key evil-normal-state-map (kbd ",vl") 'avy-goto-line)
-  (define-key evil-normal-state-map (kbd ",vy") 'avy-kill-ring-save-region)
-  (define-key evil-normal-state-map (kbd ",vw") 'avy-goto-word-0)
-  (define-key evil-normal-state-map (kbd ",vp") 'avy-copy-region)
-  (define-key evil-normal-state-map (kbd ",vv") 'avy-copy-line))
+  (define-key evil-normal-state-map (kbd "f") 'nil)
+  (define-key evil-normal-state-map (kbd "ft") 'avy-goto-char-timer)
+  (define-key evil-normal-state-map (kbd "fw") 'avy-goto-word-0)
+  (define-key evil-normal-state-map (kbd "fl") 'avy-goto-line)
+  (define-key evil-normal-state-map (kbd "fc") 'avy-copy-line)
+  (define-key evil-normal-state-map (kbd "fk") 'avy-kill-ring-save-region)
+  (define-key evil-normal-state-map (kbd "fr") 'avy-copy-region))
 
 
 (provide 'init-avy)

@@ -1,6 +1,22 @@
 ;;; init-prot.el --- Protesilaos Stavrou -*- lexical-binding: t -*-
 ;; https://protesilaos.com/emacs/dotemacs
 
+(straight-use-package '(usls
+                        :type git
+                        :host gitlab
+                        :repo "protesilaos/usls"))
+
+
+;; usls
+(setq usls-directory (expand-file-name "~/Dropbox/notes/"))
+(setq usls-known-categories '("research" "work" "misc"))
+(setq usls-file-type-extension ".txt")
+(setq usls-subdir-support nil)
+(setq usls-file-region-separator 'line)
+(setq usls-file-region-separator-heading-level 1)
+(setq usls-custom-header-function nil)
+
+;; time
 (setq display-time-format "%a %e %b, %H:%M")
 ;; (setq display-time-24hr-format t)
 ;; (setq display-time-day-and-date t)
@@ -177,7 +193,14 @@ If narrowing is in effect, widen the view."
     :states '(normal visual))
   (p-space-leader-def
     "e"  '(:ignore t :which-key "editing")
-    "en" '(prot-simple-narrow-dwim :which-key "prot-simple-narrow-dwim")))
+    "en" '(prot-simple-narrow-dwim :which-key "prot-simple-narrow-dwim")
+    "n"  '(:ignore t :which-key "note")
+    "nn" '(usls-new-note :which-key "usls new note")
+    "nf" '(usls-find-file :which-key "usls find file")
+    "nN" '(usls-append-region-buffer-or-file :which-key "usls append")
+    "nd" '(usls-dired :which-key "usls dired")
+    "ni" '(usls-id-insert :which-key "usls insert id")
+    "nl" '(usls-follow-link :which-key "usls follow link")))
 
 
 (provide 'init-prot)

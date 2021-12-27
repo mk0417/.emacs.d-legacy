@@ -23,7 +23,7 @@
     (key-chord-define m "ji" "-")
     (key-chord-define m "jj" "+")
     (key-chord-define m "dh" "=")
-    (key-chord-define m "sg" "|")
+    (key-chord-define m "sv" "|")
     (key-chord-define m "bw" "~")
     (key-chord-define m "xy" "<")
     (key-chord-define m "dy" ">")

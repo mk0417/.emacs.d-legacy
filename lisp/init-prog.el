@@ -7,7 +7,6 @@
                         :host github
                         :repo "emacs-ess/ess-stata-mode"))
 (straight-use-package 'ein)
-(straight-use-package 'eglot)
 (straight-use-package 'dumb-jump)
 
 
@@ -87,25 +86,6 @@
    "jf" 'ess-eval-function
    "jl" 'ess-eval-line
    "jr" 'ess-eval-region-or-line-and-step))
-
-;; eglot
-;; disable highlight at point
-;; https://github.com/joaotavora/eglot/issues/334
-(setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
-;; Do not overwrite company-backends
-;; https://github.com/joaotavora/eglot/issues/324
-(setq eglot-stay-out-of '(company))
-;; https://github.com/joaotavora/eglot/pull/459
-(setq eldoc-echo-area-use-multiline-p nil)
-;; enable eglot automatically
-(add-hook 'python-mode-hook 'eglot-ensure)
-;; disable flymake
-;; https://github.com/joaotavora/eglot/issues/660#issuecomment-813366843
-(add-hook 'python-mode-hook
-          (lambda ()
-            (setq-local eglot-stay-out-of '(flymake))
-            (add-hook 'flymake-diagnostic-functions 'eglot-flymake-backend nil t)))
-
 
 ;; dumb-jump
 (setq dumb-jump-prefer-searcher 'rg)

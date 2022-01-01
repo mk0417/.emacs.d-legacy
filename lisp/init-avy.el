@@ -199,6 +199,31 @@ active region use it instead."
 
 (setf (alist-get ?G avy-dispatch-alist) 'avy-action-tuxi)
 
+(defun p-avy-goto-word-current-line ()
+  (interactive)
+  (avy-with avy-goto-word-0
+    (avy-goto-word-0 nil (line-beginning-position) (line-end-position))))
+
+(defun p-avy-goto-word-block ()
+  (interactive)
+  (let ((block-beginning-position (progn (p-beginning-of-block) (line-beginning-position)))
+        (block-end-position (progn (p-end-of-block) (line-end-position))))
+    (avy-with avy-goto-word-0
+      (avy-goto-word-0 nil block-beginning-position block-end-position))))
+
+(defun p-avy-goto-bracket (&optional BEG END)
+  (interactive)
+  (let ((avy-command this-command))
+    (avy-jump "\\((+\\|\\[+\\)" :beg BEG :end END)))
+(add-to-list 'avy-orders-alist '(p-avy-goto-bracket . avy-order-closest))
+
+(defun p-avy-goto-bracket-block ()
+  (interactive)
+  (let ((block-beginning-position (progn (p-beginning-of-block) (line-beginning-position)))
+        (block-end-position (progn (p-end-of-block) (line-end-position))))
+    (avy-with p-avy-goto-bracket
+      (p-avy-goto-bracket block-beginning-position block-end-position))))
+
 
 ;; keybindings
 (with-eval-after-load 'evil
@@ -207,8 +232,12 @@ active region use it instead."
   (define-key evil-normal-state-map (kbd "fw") 'avy-goto-word-0)
   (define-key evil-normal-state-map (kbd "fl") 'avy-goto-line)
   (define-key evil-normal-state-map (kbd "fc") 'avy-copy-line)
-  (define-key evil-normal-state-map (kbd "fk") 'avy-kill-ring-save-region)
-  (define-key evil-normal-state-map (kbd "fr") 'avy-copy-region))
+  (define-key evil-normal-state-map (kbd "fd") 'avy-kill-ring-save-region)
+  (define-key evil-normal-state-map (kbd "fr") 'avy-copy-region)
+  (define-key evil-normal-state-map (kbd "f.") 'p-avy-goto-word-current-line)
+  (define-key evil-normal-state-map (kbd "f,") 'p-avy-goto-word-block)
+  (define-key evil-normal-state-map (kbd "fK") 'p-avy-goto-bracket)
+  (define-key evil-normal-state-map (kbd "fk") 'p-avy-goto-bracket-block))
 
 
 (provide 'init-avy)

@@ -16,6 +16,19 @@
       evil-want-C-u-scroll t)
 (add-hook 'after-init-hook 'evil-mode)
 
+;; movement functions
+(defun p-beginning-of-block ()
+  (interactive)
+  (skip-chars-forward " \n\t")
+  (when (re-search-backward "\n[ \t]*\n" nil 1)
+    (goto-char (match-end 0))))
+
+(defun p-end-of-block ()
+  (interactive)
+  (re-search-forward "\n[ \t]*\n" nil 1)
+  (previous-line)
+  (end-of-line))
+
 (with-eval-after-load 'evil
   (setq evilmi-shortcut "m")
   (dolist (hook '(prog-mode-hook markdown-mode-hook org-mode-hook))
@@ -75,6 +88,8 @@
   (define-key evil-normal-state-map (kbd "gcy") 'evilnc-copy-and-comment-lines)
   (define-key evil-normal-state-map (kbd "gor") 'p-ex-evil-buffer-replace)
   (define-key evil-normal-state-map (kbd "gox") 'start-ex-sub-on-region)
+  (define-key evil-normal-state-map (kbd ";u") 'p-beginning-of-block)
+  (define-key evil-normal-state-map (kbd ";l") 'p-end-of-block)
 
   (define-key evil-visual-state-map (kbd "C-e") 'evil-end-of-line)
   (define-key evil-visual-state-map (kbd "C-b") 'backward-char)

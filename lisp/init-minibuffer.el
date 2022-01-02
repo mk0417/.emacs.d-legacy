@@ -87,7 +87,7 @@
     '(read-only t cursor-intangible t face minibuffer-prompt))
 (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-(mct-mode 1)
+(mct-minibuffer-mode 1)
 
 ;; vertico
 ;; (add-hook 'after-init-hook 'vertico-mode)

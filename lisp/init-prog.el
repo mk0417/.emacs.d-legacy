@@ -89,10 +89,11 @@
    "jr" 'ess-eval-region-or-line-and-step))
 
 ;; Julia
-(general-create-definer p-julia-leader-def
-    :prefix ";"
-    :states '(normal visual)
-    :keymaps 'julia-mode-map)
+(with-eval-after-load 'julia-mode
+  (general-create-definer p-julia-leader-def
+      :prefix ";"
+      :states '(normal visual)
+      :keymaps 'julia-mode-map)
   (p-julia-leader-def
     "j"  '(:ignore t :which-key "jupyter")
     "jj" 'jupyter-run-repl
@@ -105,7 +106,7 @@
     "ji" 'jupyter-inspect-at-point
     "jC" 'jupyter-eval-remove-overlays
     "jc" 'p-jupyter-remove-line-overlay
-    "jw" 'jupyter-repl-pop-to-buffer)
+    "jw" 'jupyter-repl-pop-to-buffer))
 
 ;; dumb-jump
 (setq dumb-jump-prefer-searcher 'rg)

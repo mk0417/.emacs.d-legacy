@@ -109,8 +109,7 @@
 
 ;; consult
 (with-eval-after-load 'consult
-  (setq consult-narrow-key "<"
-        consult-line-numbers-widen t
+  (setq consult-line-numbers-widen t
         consult-async-min-input 2
         consult-async-refresh-delay  0.15
         consult-async-input-throttle 0.2
@@ -197,7 +196,7 @@
     (if (null keymap)
         (which-key--hide-popup-ignore-command)
       (which-key--show-keymap
-       (if (eq (caar targets) 'embark-become)
+       (if (eq (plist-get (car targets) :type) 'embark-become)
            "Become"
          (format "Act on %s '%s'%s"
                  (plist-get (car targets) :type)
@@ -208,7 +207,16 @@
              ((and (pred keymapp) km) km)
              (_ (key-binding prefix 'accept-default)))
          keymap)
-       nil nil t))))
+       nil nil t (lambda (binding)
+                   (not (string-suffix-p "-argument" (cdr binding))))))))
+
+(defun embark-hide-which-key-indicator (fn &rest args)
+  (which-key--hide-popup-ignore-command)
+  (let ((embark-indicators
+         (remq #'embark-which-key-indicator embark-indicators)))
+      (apply fn args)))
+
+(advice-add #'embark-completing-read-prompter :around #'embark-hide-which-key-indicator)
 
 (with-eval-after-load 'embark
   (setq embark-keymap-prompter-key ",")

@@ -13,7 +13,7 @@
       company-auto-complete nil
       company-auto-complete-chars nil
       company-auto-commit nil
-      company-tooltip-limit 10
+      company-tooltip-limit 5
       company-tooltip-align-annotations t
       company-tooltip-margin 0
       company-minimum-prefix-length 2
@@ -64,6 +64,11 @@
      ((t (:background "#ffeead" :foreground "red"))))
    '(company-tooltip-common
      ((t (:background "#ffeead" :foreground "black")))))
+
+  (setq company-show-quick-access 'left)
+  (custom-set-variables
+   '(company-quick-access-keys '("a" "s" "d" "f" "e"))
+   '(company-quick-access-modifier 'meta))
 
   (define-key company-mode-map (kbd "C-j") 'company-complete)
   (define-key company-mode-map [remap completion-at-point] 'company-complete)

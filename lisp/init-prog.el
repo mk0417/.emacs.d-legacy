@@ -6,6 +6,7 @@
                         :type git
                         :host github
                         :repo "emacs-ess/ess-stata-mode"))
+(straight-use-package 'julia-mode)
 (straight-use-package 'ein)
 (straight-use-package 'dumb-jump)
 
@@ -86,6 +87,25 @@
    "jf" 'ess-eval-function
    "jl" 'ess-eval-line
    "jr" 'ess-eval-region-or-line-and-step))
+
+;; Julia
+(general-create-definer p-julia-leader-def
+    :prefix ";"
+    :states '(normal visual)
+    :keymaps 'julia-mode-map)
+  (p-julia-leader-def
+    "j"  '(:ignore t :which-key "jupyter")
+    "jj" 'jupyter-run-repl
+    "jr" 'jupyter-eval-line-or-region
+    "jf" 'jupyter-eval-defun
+    "je" 'p-jupyter-eval-block
+    "jR" 'jupyter-repl-restart-kernel
+    "jK" 'jupyter-repl-clear-cells
+    "jI" 'jupyter-repl-interrupt-kernel
+    "ji" 'jupyter-inspect-at-point
+    "jC" 'jupyter-eval-remove-overlays
+    "jc" 'p-jupyter-remove-line-overlay
+    "jw" 'jupyter-repl-pop-to-buffer)
 
 ;; dumb-jump
 (setq dumb-jump-prefer-searcher 'rg)

@@ -214,7 +214,7 @@ active region use it instead."
 (defun p-avy-goto-bracket (&optional BEG END)
   (interactive)
   (let ((avy-command this-command))
-    (avy-jump "\\((+\\|\\[+\\)" :beg BEG :end END)))
+    (avy-jump "\\((+\\|\\[+\\|)+\\|]+\\)" :beg BEG :end END)))
 (add-to-list 'avy-orders-alist '(p-avy-goto-bracket . avy-order-closest))
 
 (defun p-avy-goto-bracket-block ()
@@ -232,7 +232,7 @@ active region use it instead."
   (define-key evil-normal-state-map (kbd "fw") 'avy-goto-word-0)
   (define-key evil-normal-state-map (kbd "fl") 'avy-goto-line)
   (define-key evil-normal-state-map (kbd "fc") 'avy-copy-line)
-  (define-key evil-normal-state-map (kbd "fd") 'avy-kill-ring-save-region)
+  (define-key evil-normal-state-map (kbd "fs") 'avy-kill-ring-save-region)
   (define-key evil-normal-state-map (kbd "fr") 'avy-copy-region)
   (define-key evil-normal-state-map (kbd "f.") 'p-avy-goto-word-current-line)
   (define-key evil-normal-state-map (kbd "f,") 'p-avy-goto-word-block)

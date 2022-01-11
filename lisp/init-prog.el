@@ -90,6 +90,8 @@
 
 ;; Julia
 (with-eval-after-load 'julia-mode
+  (add-hook 'julia-mode-hook 'display-fill-column-indicator-mode)
+
   (general-create-definer p-julia-leader-def
       :prefix ";"
       :states '(normal visual)

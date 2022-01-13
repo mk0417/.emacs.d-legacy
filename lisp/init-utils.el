@@ -64,6 +64,10 @@
   (interactive)
   (insert (format-time-string "%Y-%m-%d")))
 
+(defun p-insert-date-alt ()
+  (interactive)
+  (insert (format-time-string "%Y-%m-%d, %A")))
+
 ;; insert current buffer name
 (defun p-insert-file-name ()
   (interactive)
@@ -178,6 +182,7 @@
     "fR" '(p-rename-this-file-and-buffer :which-key "rename file")
     "e"  '(:ignore t :which-key "editing")
     "ed" '(p-insert-date :which-key "insert date")
+    "eD" '(p-insert-date-alt :which-key "insert date alt")
     "ek" '(p-insert-uk-date :which-key "insert UK date")
     "et" '(p-html-region-insert-tag :which-key "insert html tag")
     "s"  '(:ignore t :which-key "search")

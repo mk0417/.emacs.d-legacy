@@ -518,7 +518,6 @@ Version: 2020-11-24 2021-07-11"
     (skip-chars-forward $skipChars)
     (set-mark $p1)))
 
-
 ;; keybindings
 (with-eval-after-load 'evil
   (define-key evil-normal-state-map (kbd ";a") 'xah-beginning-of-line-or-block)
@@ -545,7 +544,6 @@ Version: 2020-11-24 2021-07-11"
     :prefix "SPC"
     :states '(normal visual))
   (p-space-leader-def
-    "b"  '(:ignore t :which-key "buffer")
     "bn"  '(xah-new-empty-buffer :which-key "new buffer"))
 
   (general-create-definer p-comma-leader-def

@@ -117,6 +117,8 @@
 (global-set-key (kbd "C-c C-u") 'universal-argument)
 (global-set-key (kbd "C-c C-e") 'occur-edit-mode)
 (define-key minibuffer-local-map (kbd "C-k") 'delete-backward-char)
+(global-set-key (kbd "M-i") #'forward-paragraph)
+(global-set-key (kbd "M-o") #'backward-paragraph)
 
 (add-hook 'after-init-hook 'which-key-mode)
 (setq-default which-key-idle-delay 0.8)

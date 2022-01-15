@@ -183,7 +183,7 @@
     "e"  '(:ignore t :which-key "editing")
     "ed" '(p-insert-date :which-key "insert date")
     "eD" '(p-insert-date-alt :which-key "insert date alt")
-    "ek" '(p-insert-uk-date :which-key "insert UK date")
+    "eu" '(p-insert-uk-date :which-key "insert UK date")
     "et" '(p-html-region-insert-tag :which-key "insert html tag")
     "s"  '(:ignore t :which-key "search")
     "sg" '(p-google-search :which-key "search on google")

@@ -16,7 +16,7 @@
     ("atm" "at the moment" )
     ("btw" "By the way," )
     ("eq" "==" )
-    ("hr" "--------------------------------------------------" )
+    ("dashline" "--------------------------------------------------" )
     ("wrdspgcon" "psql postgresql://username:password@wrds-pgdata.wharton.upenn.edu:9737/wrds?sslmode=require")
     ("wrdspgtable" "select table_name, table_schema, table_type from information_schema.tables where table_name='crsp';")
     ("wrdspgschema" "select schema_name from information_schema.schemata order by schema_name limit 10;")))

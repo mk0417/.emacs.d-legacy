@@ -230,6 +230,54 @@
 ;; keystrokes feedback interval
 (setq echo-keystrokes 0.02)
 
+;; hrm
+(defvar hrm-notes-category 'hrm-note
+  "Category symbol for the notes in this package.")
+
+(defvar hrm-notes-history nil
+  "History variable for hrm-notes.")
+
+(defvar hrm-notes-sources-data
+  '(("literature" ?l "~/Dropbox/literature/")))
+
+(autoload 'consult--multi "consult")
+
+(defun hrm-annotate-note (name cand)
+  "Annotate file CAND with its source name, size, and modification time."
+  (let* ((attrs (file-attributes cand))
+         (fsize (file-size-human-readable (file-attribute-size attrs)))
+         (ftime (format-time-string "%b %d %H:%M" (file-attribute-modification-time attrs))))
+    (put-text-property 0 (length name) 'face 'marginalia-type name)
+    (put-text-property 0 (length fsize) 'face 'marginalia-size fsize)
+    (put-text-property 0 (length ftime) 'face 'marginalia-date ftime)
+    (format "%15s  %7s  %10s" name fsize ftime)))
+
+(defun hrm-notes-make-source (name char dir)
+  "Return a notes source list suitable for `consult--multi'.
+NAME is the source name, CHAR is the narrowing character,
+and DIR is the directory to find notes. "
+  (let ((idir (propertize (file-name-as-directory dir) 'invisible t)))
+    `(:name     ,name
+                :narrow   ,char
+                :category ,hrm-notes-category
+                :face     consult-file
+                :annotate ,(apply-partially 'hrm-annotate-note name)
+                :items    ,(lambda () (mapcar (lambda (f) (concat idir f))
+                                              ;; filter files that glob *.*
+                                              (directory-files dir nil "[^.].*[.].+")))
+                ;; :action   ,(lambda (f) (find-file f) (markdown-mode)))))
+                :action   find-file)))  ; use this if you don't want to force markdown-mode
+
+(defun hrm-notes ()
+  "Find a file in a notes directory."
+  (interactive)
+  (let ((completion-ignore-case t))
+    (consult--multi (mapcar #'(lambda (s) (apply #'hrm-notes-make-source s))
+                            hrm-notes-sources-data)
+                    :prompt "Notes File: "
+                    :group nil
+                    :history 'hrm-notes-history)))
+
 
 ;; keybindings
 (global-set-key (kbd "C-c C-d") 'consult-dir)
@@ -252,7 +300,7 @@
     "s"  '(:ignore t :which-key "search")
     "ss" '(consult-line :which-key "consult line")
     "sS" '(p-consult-at-point-line :which-key "consult at-point line")
-    "sm"  '(consult-multi-occur :which-key "consult multi occur")
+    "sm" '(consult-multi-occur :which-key "consult multi occur")
     "sp" '(consult-ripgrep :which-key "consult-rg project")
     "sP" '(p-consult-rg-at-point-project :which-key "consult-rg at-point project")
     "sd" '(p-consult-rg-current-dir :which-key "consult-rg current dir")
@@ -261,7 +309,9 @@
     "sf" '(p-consult-fd-global :which-key "consult-fd global files")
     "sF" '(p-consult-fd-local :which-key "consult-fd local files")
     "si" '(consult-imenu :which-key "consult imenu")
-    "sl" '(consult-outline :which-key "consult outline")))
+    "sl" '(consult-outline :which-key "consult outline")
+    "n"  '(:ignore t :which-key "note")
+    "nh" '(hrm-notes :which-key "hrm notes find")))
 
 
 (provide 'init-minibuffer)
